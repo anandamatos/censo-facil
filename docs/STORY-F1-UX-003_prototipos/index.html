@@ -1,0 +1,1667 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xml:lang="pt" 
+      lang="pt">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia e-MAG 3.1 – Diretrizes de Marcação e Acessibilidade</title>
+  <meta name="description" content="Visualize e explore as diretrizes de acessibilidade e-MAG 3.1 com exemplos práticos baseados no DSGov." />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@govbr-ds/core@latest/dist/core.min.css" />
+  
+  <style type="text/css">
+    /* ============================================================
+       ESTILOS GLOBAIS E COMPONENTES
+       ============================================================ */
+    
+    /* ----- Reset e Base ----- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #F0F4FA;
+      color: #1C1C1E;
+    }
+    
+    /* ----- Scrollbar ----- */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #C5D4EB;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1351B4;
+    }
+    
+    /* ----- Code Blocks (XHTML Estrito) ----- */
+    .code-block {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.65;
+      background: #0D1117;
+      color: #E6EDF3;
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      border-left: 3px solid #1351B4;
+    }
+    
+    .code-block .token-tag   { color: #7EE787; }
+    .code-block .token-attr  { color: #79C0FF; }
+    .code-block .token-val   { color: #FFA657; }
+    .code-block .token-comment { color: #8B949E; font-style: italic; }
+    .code-block .token-ok    { color: #56D364; font-weight: 500; }
+    .code-block .token-err   { color: #F85149; font-weight: 500; }
+    
+    /* ----- Landmark Boxes (e-MAG Área de Marcação) ----- */
+    .landmark-box {
+      border: 2px solid;
+      border-radius: 4px;
+      padding: 0.5rem 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      position: relative;
+    }
+    
+    .landmark-label {
+      position: absolute;
+      top: -10px;
+      left: 8px;
+      background: #FFFFFF;
+      padding: 0 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    /* ----- Animações (RESTAURADAS) ----- */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(19,81,180,0.4); }
+      70%  { box-shadow: 0 0 0 8px rgba(19,81,180,0); }
+      100% { box-shadow: 0 0 0 0 rgba(19,81,180,0); }
+    }
+    .pulse { animation: pulse-ring 2s infinite; }
+    
+    @keyframes progress-fill {
+      from { width: 0%; }
+      to   { width: 85%; }
+    }
+    .progress-animate { animation: progress-fill 1.5s ease-out forwards; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+    
+    /* ----- Utilitários de Acessibilidade ----- */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    
+    .focus-visible:focus-visible {
+      outline: 3px solid #1351B4;
+      outline-offset: 2px;
+    }
+    
+    /* ----- Cartões e Layout ----- */
+    .card {
+      background: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid #C5D4EB;
+      padding: 1.25rem;
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    
+    .badge-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #EAF4EC;
+      color: #168821;
+      border: 1px solid #168821;
+    }
+    
+    .badge-error {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #FEF0EF;
+      color: #E52207;
+      border: 1px solid #E52207;
+    }
+    
+    .badge-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #EBF1FB;
+      color: #1351B4;
+      border: 1px solid #1351B4;
+    }
+    
+    /* ----- Formulários (e-MAG Área de Formulário) ----- */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1C1C1E;
+      margin-bottom: 0.25rem;
+    }
+    
+    .form-label .required {
+      color: #E52207;
+      margin-left: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 400;
+    }
+    
+    .form-help {
+      font-size: 0.75rem;
+      color: #555770;
+      margin-bottom: 0.375rem;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      border: 1px solid #C5D4EB;
+      font-size: 0.875rem;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #1351B4;
+      box-shadow: 0 0 0 3px rgba(19, 81, 180, 0.2);
+    }
+    
+    .form-input.error {
+      border-color: #E52207;
+      background: #FEF8F8;
+    }
+    
+    /* ----- Botões (DSGov) ----- */
+    .btn-primary {
+      display: inline-block;
+      width: 100%;
+      padding: 0.625rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #FFFFFF;
+      background: #1351B4;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-align: center;
+    }
+    
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    
+    .btn-secondary {
+      display: inline-block;
+      padding: 0.625rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #1351B4;
+      background: transparent;
+      border: 1px solid #1351B4;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    
+    .btn-secondary:hover {
+      background: #EBF1FB;
+    }
+    
+    /* ----- Progress Bar (WCAG 2.2) ----- */
+    .progress-bar {
+      height: 1rem;
+      background: #C5D4EB;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: #1351B4;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .gnss-status-ok { background: #EAF4EC; color: #168821; border-color: rgba(22, 136, 33, 0.26); }
+    .gnss-status-aceitavel { background: #FFF8E1; color: #916A00; border-color: rgba(145, 106, 0, 0.26); }
+    .gnss-status-insuficiente { background: #FEF0EF; color: #E52207; border-color: rgba(229, 34, 7, 0.26); }
+    
+    /* ----- Layout Grid e Container ----- */
+    .container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    
+    @media (min-width: 48rem) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    
+    /* ----- Layout com Sidebar (RESTAURADO) ----- */
+    .layout-with-sidebar {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .layout-sidebar {
+      display: none;
+      width: 13rem;
+      flex-shrink: 0;
+    }
+    
+    .layout-sidebar-inner {
+      position: sticky;
+      top: 4rem;
+      padding-top: 1rem;
+    }
+    
+    .layout-main {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    @media (min-width: 64rem) {
+      .layout-sidebar {
+        display: block;
+      }
+    }
+    
+    /* ----- Sidebar Navigation ----- */
+    .sidebar-nav .nav-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555770;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+    
+    .sidebar-nav a {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      transition: all 0.2s;
+      color: #555770;
+      border-left: 2px solid transparent;
+      text-decoration: none;
+      background: transparent;
+    }
+    
+    .sidebar-nav a:hover {
+      background: #EBF1FB;
+      color: #1351B4;
+    }
+    
+    .sidebar-nav a.active {
+      background: #EBF1FB;
+      color: #1351B4;
+      border-left-color: #1351B4;
+    }
+    
+    .sidebar-stats {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      text-align: center;
+      background: #EAF4EC;
+      border: 1px solid #168821;
+    }
+    
+    .sidebar-stats .number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #168821;
+    }
+    
+    .sidebar-stats .label {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      color: #0D5A1B;
+    }
+    
+    .sidebar-stats .sub {
+      font-size: 0.6rem;
+      margin-top: 0.125rem;
+      color: #555770;
+    }
+    
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    
+    /* ----- Header (e-MAG Area de Marcacao: role="banner") ----- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #071D41;
+      padding: 0.5rem 0;
+    }
+    
+    .site-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .site-header .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .site-header .logo-badge {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 4px;
+      background: #1351B4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    
+    .site-header .logo-text {
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 0.875rem;
+      line-height: 1.25;
+    }
+    
+    .site-header .logo-sub {
+      color: #93B8E8;
+      font-size: 0.65rem;
+    }
+    
+    .site-nav {
+      display: none;
+    }
+    
+    .menu-toggle { display: none; }
+    
+    @media (max-width: 63.99rem) {
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 4px;
+        background: #1351B4;
+        color: #FFFFFF;
+        border: 1px solid rgba(147, 184, 232, 0.5);
+        font-size: 1.125rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .menu-toggle:hover { background: #1C51A8; }
+      .site-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem 1rem 0.75rem;
+        background: #071D41;
+        border-top: 1px solid rgba(147, 184, 232, 0.3);
+        box-shadow: 0 8px 16px rgba(7, 29, 65, 0.3);
+      }
+      .site-nav.open { display: flex; }
+      .site-nav a { padding: 0.5rem 0.75rem; }
+    }
+    
+    @media (min-width: 64rem) {
+      .site-nav { display: flex; gap: 0.25rem; }
+    }
+    
+    .site-nav a {
+      padding: 0.25rem 0.625rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: #93B8E8;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+    
+    .site-nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .site-nav a.active {
+      background: #1351B4;
+      color: #FFFFFF;
+    }
+    
+    /* ----- Hero Section ----- */
+    .hero {
+      background: linear-gradient(135deg, #071D41 0%, #1351B4 100%);
+      padding: 3rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      color: #93B8E8;
+      font-size: 1rem;
+      line-height: 1.625;
+      max-width: 42rem;
+    }
+    
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    @media (min-width: 48rem) {
+      .hero h1 { font-size: 2.5rem; }
+      .hero-stats { grid-template-columns: repeat(4, 1fr); }
+    }
+    
+    .hero-stat {
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+    
+    .hero-stat .number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    
+    .hero-stat .label {
+      font-size: 0.75rem;
+      color: #93B8E8;
+      margin-top: 0.125rem;
+    }
+    
+    /* ----- Section Headers ----- */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .section-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: #FFFFFF;
+      background: #1351B4;
+      flex-shrink: 0;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #071D41;
+    }
+    
+    .section-desc {
+      font-size: 0.875rem;
+      color: #555770;
+      margin-left: 3rem;
+    }
+    
+    .section-divider {
+      height: 1px;
+      background: #C5D4EB;
+      margin: 0.75rem 0 0 3rem;
+    }
+    
+    .section-spacing {
+      margin-bottom: 3rem;
+    }
+    
+    /* ----- Scrollspy active highlight ----- */
+    .section-highlight {
+      scroll-margin-top: 5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER (role="banner") – e-MAG Área de Marcação
+     ============================================================ -->
+<header role="banner" class="site-header">
+  <div class="container">
+    <div class="logo-area">
+      <div class="logo-badge" aria-hidden="true">BR</div>
+      <div>
+        <div class="logo-text">Guia e-MAG 3.1</div>
+        <div class="logo-sub">Diretrizes de Marcação e Acessibilidade</div>
+      </div>
+    </div>
+    
+    <!-- NAV (role="navigation") – LINKS NAVEGÁVEIS -->
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav-header" title="Abrir menu de navegação">☰<span class="sr-only">Menu</span></button>
+    <nav id="site-nav-header" role="navigation" aria-label="Navegação principal" class="site-nav">
+      <a href="#estrutura">Estrutura</a>
+      <a href="#titulos">Títulos</a>
+      <a href="#formularios">Formulários</a>
+      <a href="#xhtml">XHTML</a>
+      <a href="#aria">WAI-ARIA</a>
+      <a href="#checklist">Checklist</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================
+     MAIN (role="main") – e-MAG Área de Marcação
+     ============================================================ -->
+<main role="main" id="conteudo-principal">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero fade-in-up" aria-labelledby="hero-title">
+    <div class="container">
+      <div>
+        <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+          <span style="display:inline-block; padding:0.25rem 0.5rem; border-radius:0.25rem; font-size:0.7rem; font-weight:600; background:#FFCD07; color:#071D41;">e-MAG 3.1</span>
+          <span class="badge-info" style="background:rgba(38,112,232,0.13); color:#93B8E8; border-color:rgba(38,112,232,0.33);">WCAG 2.2 AA</span>
+        </div>
+        <h1 id="hero-title">Diretrizes de Marcação e Acessibilidade</h1>
+        <p>Implementação prática das diretrizes e-MAG 3.1 com o Sistema de Design do Governo Federal. Estrutura semântica, formulários acessíveis, XHTML estrito e WAI-ARIA.</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="number">15</div>
+            <div class="label">Critérios</div>
+          </div>
+          <div class="hero-stat">
+            <div class="number">100%</div>
+            <div class="label">Conformes</div>
+          </div>
+          <div class="hero-stat">
+            <div class="number">AA</div>
+            <div class="label">Nível WCAG</div>
+          </div>
+          <div class="hero-stat">
+            <div class="number">5</div>
+            <div class="label">Seções</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTEÚDO COM SIDEBAR ===================== -->
+  <div class="container" style="padding:2.5rem 1rem;">
+
+    <!-- LAYOUT: Sidebar + Main (RESTAURADO) -->
+    <div class="layout-with-sidebar">
+
+      <!-- SIDEBAR (visível em telas grandes) -->
+      <aside role="complementary" aria-label="Navegação rápida" class="layout-sidebar">
+        <div class="layout-sidebar-inner">
+          <nav class="sidebar-nav" aria-label="Seções do guia">
+            <span class="nav-label">Seções</span>
+            <a href="#estrutura">1. Estrutura Semântica</a>
+            <a href="#titulos">2. Hierarquia de Títulos</a>
+            <a href="#formularios">3. Labels em Formulários</a>
+            <a href="#xhtml">4. Rigor XHTML</a>
+            <a href="#aria">5. WAI-ARIA</a>
+          </nav>
+          
+          <div class="sidebar-stats">
+            <div class="number">100%</div>
+            <div class="label">Conformidade</div>
+            <div class="sub">15/15 critérios</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="layout-main">
+
+        <!-- ============================================================
+             SEÇÃO 1 – ESTRUTURA SEMÂNTICA
+             ============================================================ -->
+        <section id="estrutura" aria-labelledby="sec1-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">1</span>
+            <h2 id="sec1-title" class="section-title">Estrutura HTML Semântica e Landmarks</h2>
+          </div>
+          <p class="section-desc">Elementos de região e roles ARIA identificam as áreas funcionais da página para tecnologias assistivas.</p>
+          <div class="section-divider"></div>
+
+          <!-- Grid: Mapa de Regiões -->
+          <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+            
+            <!-- Mapa de Regiões -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:1rem;">Mapa de Regiões da Página</h3>
+              <div style="display:flex; flex-direction:column; gap:0.5rem; font-family:'JetBrains Mono',monospace; font-size:0.75rem;">
+                
+                <!-- HEADER -->
+                <div class="landmark-box" style="border-color:#1351B4; background:#EBF1FB;">
+                  <span class="landmark-label" style="color:#1351B4;">HEADER</span>
+                  <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem;">
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">role="banner"</span>
+                    <span style="color:#555770;">Cabeçalho da instituição</span>
+                  </div>
+                  <div style="margin-top:0.5rem; padding:0.25rem 0.5rem; border-radius:2px; font-size:0.6rem; background:#071D41; color:#DBE8FB;">&lt;govbr-bar&gt; · logo · identidade visual</div>
+                </div>
+                
+                <!-- NAV -->
+                <div class="landmark-box" style="border-color:#168821; background:#EAF4EC;">
+                  <span class="landmark-label" style="color:#168821;">NAV</span>
+                  <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem; flex-wrap:wrap;">
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#168821; color:#FFFFFF;">role="navigation"</span>
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#168821; color:#FFFFFF;">aria-label="..."</span>
+                  </div>
+                  <div style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                    <span style="padding:0.125rem 0.5rem; border-radius:2px; font-size:0.6rem; background:#168821; color:#FFFFFF;">Dashboard</span>
+                    <span style="padding:0.125rem 0.5rem; border-radius:2px; font-size:0.6rem; background:#168821; color:#FFFFFF;">Coleta</span>
+                    <span style="padding:0.125rem 0.5rem; border-radius:2px; font-size:0.6rem; background:#168821; color:#FFFFFF;">Auditoria</span>
+                  </div>
+                </div>
+                
+                <!-- MAIN -->
+                <div class="landmark-box" style="border-color:#E52207; background:#FEF0EF;">
+                  <span class="landmark-label" style="color:#E52207;">MAIN</span>
+                  <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem; flex-wrap:wrap;">
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#E52207; color:#FFFFFF;">role="main"</span>
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#FEF0EF; color:#E52207; border:1px solid #E52207;">id="conteudo-principal"</span>
+                  </div>
+                  <div style="margin-top:0.5rem; padding:0.5rem; border:1px dashed #E52207; border-radius:2px;">
+                    <span style="font-size:0.6rem; color:#E52207;">&lt;section aria-labelledby="titulo-coleta"&gt;</span>
+                    <div style="margin-left:0.75rem; margin-top:0.25rem; font-size:0.6rem; color:#555770;">&lt;h2 id="titulo-coleta"&gt;Coleta de Dados&lt;/h2&gt;</div>
+                  </div>
+                </div>
+                
+                <!-- FOOTER -->
+                <div class="landmark-box" style="border-color:#555770; background:#F5F5F5;">
+                  <span class="landmark-label" style="color:#555770;">FOOTER</span>
+                  <div style="display:flex; align-items:center; gap:0.5rem; margin-top:0.25rem;">
+                    <span style="font-size:0.65rem; padding:0.125rem 0.375rem; border-radius:2px; background:#555770; color:#FFFFFF;">role="contentinfo"</span>
+                  </div>
+                  <div style="margin-top:0.5rem; font-size:0.6rem; color:#555770;">© 2026 IBGE – Todos os direitos reservados</div>
+                </div>
+                
+              </div>
+            </div>
+
+            <!-- Explicação dos Landmarks -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div style="display:flex; gap:0.75rem; padding:1rem; border-radius:4px; background:#EBF1FB; border:1px solid rgba(19,81,180,0.26);">
+                <span style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.5rem; border-radius:2px; background:#1351B4; color:#FFFFFF; white-space:nowrap; height:fit-content;">&lt;header role="banner"&gt;</span>
+                <p style="font-size:0.75rem; line-height:1.625; color:#1C1C1E; margin:0;">Cabeçalho da página, identificado como região de banner por leitores de tela. Deve conter logo e identidade institucional.</p>
+              </div>
+              <div style="display:flex; gap:0.75rem; padding:1rem; border-radius:4px; background:#EAF4EC; border:1px solid rgba(22,136,33,0.26);">
+                <span style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.5rem; border-radius:2px; background:#168821; color:#FFFFFF; white-space:nowrap; height:fit-content;">&lt;nav role="navigation"&gt;</span>
+                <p style="font-size:0.75rem; line-height:1.625; color:#1C1C1E; margin:0;">Marca a área de navegação principal. O atributo aria-label diferencia múltiplas navegações na mesma página.</p>
+              </div>
+              <div style="display:flex; gap:0.75rem; padding:1rem; border-radius:4px; background:#FEF0EF; border:1px solid rgba(229,34,7,0.26);">
+                <span style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.5rem; border-radius:2px; background:#E52207; color:#FFFFFF; white-space:nowrap; height:fit-content;">&lt;main role="main"&gt;</span>
+                <p style="font-size:0.75rem; line-height:1.625; color:#1C1C1E; margin:0;">Indica o conteúdo principal. Deve haver exatamente um por documento. Permite skip links para usuários de teclado.</p>
+              </div>
+              <div style="display:flex; gap:0.75rem; padding:1rem; border-radius:4px; background:#F5F5F5; border:1px solid rgba(85,87,112,0.26);">
+                <span style="font-size:0.65rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.5rem; border-radius:2px; background:#555770; color:#FFFFFF; white-space:nowrap; height:fit-content;">&lt;footer role="contentinfo"&gt;</span>
+                <p style="font-size:0.75rem; line-height:1.625; color:#1C1C1E; margin:0;">Identifica metadados e informações institucionais do rodapé da página.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Código de Referência -->
+          <div class="card">
+            <div class="card-header">
+              <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin:0;">Código de Referência</h3>
+              <span class="badge-success">✓ Correto</span>
+            </div>
+            <pre class="code-block"><span class="token-tag">&lt;header</span> <span class="token-attr">role</span>=<span class="token-val">"banner"</span> <span class="token-attr">class</span>=<span class="token-val">"br-header"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"header-logo"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;img</span> <span class="token-attr">src</span>=<span class="token-val">"logo-ibge.png"</span> <span class="token-attr">alt</span>=<span class="token-val">"IBGE – Instituto Brasileiro de Geografia e Estatística"</span> <span class="token-tag">/&gt;</span>
+  <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/header&gt;</span>
+
+<span class="token-tag">&lt;nav</span> <span class="token-attr">role</span>=<span class="token-val">"navigation"</span> <span class="token-attr">aria-label</span>=<span class="token-val">"Navegação principal"</span><span class="token-tag">&gt;</span>
+  <span class="token-comment">&lt;!-- lista de links de navegação --&gt;</span>
+<span class="token-tag">&lt;/nav&gt;</span>
+
+<span class="token-tag">&lt;main</span> <span class="token-attr">role</span>=<span class="token-val">"main"</span> <span class="token-attr">id</span>=<span class="token-val">"conteudo-principal"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;section</span> <span class="token-attr">aria-labelledby</span>=<span class="token-val">"titulo-coleta"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;h2</span> <span class="token-attr">id</span>=<span class="token-val">"titulo-coleta"</span><span class="token-tag">&gt;</span>Coleta de Dados<span class="token-tag">&lt;/h2&gt;</span>
+  <span class="token-tag">&lt;/section&gt;</span>
+<span class="token-tag">&lt;/main&gt;</span>
+
+<span class="token-tag">&lt;footer</span> <span class="token-attr">role</span>=<span class="token-val">"contentinfo"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;p&gt;</span>© 2026 IBGE<span class="token-tag">&lt;/p&gt;</span>
+<span class="token-tag">&lt;/footer&gt;</span></pre>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SEÇÃO 2 – HIERARQUIA DE TÍTULOS
+             ============================================================ -->
+        <section id="hierarquia" aria-labelledby="sec2-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">2</span>
+            <h2 id="sec2-title" class="section-title">Hierarquia de Títulos</h2>
+          </div>
+          <p class="section-desc">Leitores de tela geram um índice da página baseado nos headings — saltos de nível quebram a navegação.</p>
+          <div class="section-divider"></div>
+
+          <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+            
+            <!-- Correto -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#168821; margin:0;">Hierarquia Correta</h3>
+                <span class="badge-success">✓ Correto</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.375rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H1</span>
+                  <span style="font-size:1rem; font-weight:700; color:#1C1C1E;">Censo Agropecuário 2026</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:1.25rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H2</span>
+                  <span style="font-size:0.875rem; font-weight:600; color:#1C1C1E;">1. Identificação do Estabelecimento</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:2.5rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H3</span>
+                  <span style="font-size:0.75rem; font-weight:500; color:#1C1C1E;">1.1 Dados do Produtor</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:3.75rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H4</span>
+                  <span style="font-size:0.75rem; color:#1C1C1E;">1.1.1 Informações Pessoais</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:1.25rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H2</span>
+                  <span style="font-size:0.875rem; font-weight:600; color:#1C1C1E;">2. Uso da Terra</span>
+                </div>
+              </div>
+              <div style="margin-top:1rem; padding:0.75rem; border-radius:4px; font-size:0.75rem; background:#EAF4EC; color:#0D5A1B;">✓ Hierarquia sequencial: H1 → H2 → H3 → H4, sem saltos de nível</div>
+            </div>
+
+            <!-- Incorreto -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin:0;">Hierarquia Incorreta</h3>
+                <span class="badge-error">✗ Incorreto</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.375rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#1351B4; color:#FFFFFF;">H1</span>
+                  <span style="font-size:0.875rem; color:#1C1C1E;">Censo Agropecuário 2026</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:1.25rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#E52207; color:#FFFFFF;">H3</span>
+                  <span style="font-size:0.875rem; color:#E52207;">1. Identificação do Estabelecimento</span>
+                  <span style="font-size:0.6rem; padding:0.125rem 0.375rem; border-radius:2px; background:#FEF0EF; color:#E52207; border:1px solid #E52207;">Saltou H2!</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-left:2.5rem;">
+                  <span style="flex-shrink:0; width:2rem; height:1.25rem; display:flex; align-items:center; justify-content:center; border-radius:2px; font-size:0.6rem; font-weight:700; background:#E52207; color:#FFFFFF;">H5</span>
+                  <span style="font-size:0.875rem; color:#E52207;">1.1 Dados do Produtor</span>
+                  <span style="font-size:0.6rem; padding:0.125rem 0.375rem; border-radius:2px; background:#FEF0EF; color:#E52207; border:1px solid #E52207;">Saltou H4!</span>
+                </div>
+              </div>
+              <div style="margin-top:1rem; padding:0.75rem; border-radius:4px; font-size:0.75rem; background:#FEF0EF; color:#B30000;">✗ Saltos de nível confundem leitores de tela e impedem navegação por índice</div>
+            </div>
+          </div>
+
+          <!-- Por que isso importa -->
+          <div class="card">
+            <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Por que isso importa</h3>
+            <div class="grid-3">
+              <div style="padding:1rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-size:1.5rem; margin-bottom:0.5rem;">🔖</div>
+                <div style="font-weight:600; font-size:0.875rem; margin-bottom:0.25rem; color:#071D41;">Índice automático</div>
+                <div style="font-size:0.75rem; line-height:1.625; color:#555770;">Leitores de tela como NVDA e JAWS criam um índice de navegação a partir dos headings.</div>
+              </div>
+              <div style="padding:1rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-size:1.5rem; margin-bottom:0.5rem;">⌨️</div>
+                <div style="font-weight:600; font-size:0.875rem; margin-bottom:0.25rem; color:#071D41;">Tecla de atalho H</div>
+                <div style="font-size:0.75rem; line-height:1.625; color:#555770;">Usuários navegam entre headings com a tecla H. Saltos quebram o fluxo de leitura.</div>
+              </div>
+              <div style="padding:1rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-size:1.5rem; margin-bottom:0.5rem;">🎯</div>
+                <div style="font-weight:600; font-size:0.875rem; margin-bottom:0.25rem; color:#071D41;">aria-labelledby</div>
+                <div style="font-size:0.75rem; line-height:1.625; color:#555770;">Sections ligadas ao heading via aria-labelledby ganham contexto semântico adicional.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SEÇÃO 3 – FORMULÁRIOS (e-MAG Área de Formulário)
+             ============================================================ -->
+        <section id="formularios" aria-labelledby="sec3-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">3</span>
+            <h2 id="sec3-title" class="section-title">Labels e Associações em Formulários</h2>
+          </div>
+          <p class="section-desc">A associação explícita label→input via for/id é obrigatória. Placeholder não substitui label.</p>
+          <div class="section-divider"></div>
+
+          <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+
+            <!-- Formulário Correto -->
+            <div class="card">
+              <div class="card-header">
+                <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin:0;">Demo — Formulário Correto</h3>
+                <span class="badge-success">✓ Correto</span>
+              </div>
+
+              <form action="#" method="post">
+                <!-- Campo: Nome -->
+                <div class="form-group">
+                  <label for="nome-produtor" class="form-label">
+                    Nome completo do produtor
+                    <span class="required" aria-hidden="true">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <input type="text" 
+                         id="nome-produtor" 
+                         name="nome_produtor" 
+                         class="form-input" 
+                         required="required" 
+                         aria-required="true" 
+                         aria-invalid="false" />
+                </div>
+
+                <!-- Campo: Tipo de produtor -->
+                <div class="form-group">
+                  <label for="tipo-produtor" class="form-label">
+                    Tipo de produtor
+                    <span class="required" aria-hidden="true">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <select id="tipo-produtor" 
+                          name="tipo_produtor" 
+                          class="form-input" 
+                          required="required" 
+                          aria-required="true" 
+                          aria-invalid="false">
+                    <option value="">Selecione...</option>
+                    <option value="familiar">Agricultura Familiar</option>
+                    <option value="patronal">Agricultura Patronal</option>
+                  </select>
+                </div>
+
+                <!-- Campo: Área total (com instrução) -->
+                <div class="form-group">
+                  <label for="area-total" class="form-label">
+                    Área total do estabelecimento
+                    <span class="required" aria-hidden="true">*</span>
+                    <span class="sr-only">(obrigatório)</span>
+                  </label>
+                  <div id="instrucao-area" class="form-help">Informe a área total em hectares. Exemplo: 50,5</div>
+                  <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <input type="number" 
+                           id="area-total" 
+                           name="area_total" 
+                           class="form-input" 
+                           step="0.1" 
+                           required="required" 
+                           aria-required="true" 
+                           aria-describedby="instrucao-area" 
+                           aria-invalid="false" />
+                    <span style="font-size:0.875rem; font-family:'JetBrains Mono',monospace; color:#555770;">ha</span>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Enviar Formulário</button>
+              </form>
+            </div>
+
+            <!-- Anti-padrão: Placeholder como Label -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="card">
+                <div class="card-header">
+                  <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin:0;">Anti-padrão: Placeholder como Label</h3>
+                  <span class="badge-error">✗ Incorreto</span>
+                </div>
+                <div style="padding:0.75rem; border-radius:4px; background:#FEF0EF; border:1px solid #E52207; margin-bottom:0.75rem;">
+                  <input type="text" 
+                         placeholder="Nome completo do produtor" 
+                         class="form-input" 
+                         disabled="disabled" 
+                         style="color:#9999AA; background:#FEF8F8; border-color:#E52207;" />
+                </div>
+                <ul style="font-size:0.75rem; color:#1C1C1E; list-style:none; padding:0; margin:0;">
+                  <li style="display:flex; gap:0.5rem; padding:0.25rem 0;"><span style="color:#E52207;">✗</span> O placeholder desaparece ao digitar</li>
+                  <li style="display:flex; gap:0.5rem; padding:0.25rem 0;"><span style="color:#E52207;">✗</span> Não é vocalizado consistentemente por leitores de tela</li>
+                  <li style="display:flex; gap:0.5rem; padding:0.25rem 0;"><span style="color:#E52207;">✗</span> Baixo contraste por padrão (falha WCAG 1.4.3)</li>
+                  <li style="display:flex; gap:0.5rem; padding:0.25rem 0;"><span style="color:#E52207;">✗</span> Não associa o campo ao rótulo semanticamente</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Atributos Essenciais (e-MAG + WCAG)</h3>
+                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                  <div style="display:flex; gap:0.75rem; align-items:flex-start;">
+                    <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">for / id</code>
+                    <span style="font-size:0.75rem; color:#555770;">Associa label ao campo; clicar no label foca o input</span>
+                  </div>
+                  <div style="display:flex; gap:0.75rem; align-items:flex-start;">
+                    <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-required</code>
+                    <span style="font-size:0.75rem; color:#555770;">Indica campo obrigatório a tecnologias assistivas</span>
+                  </div>
+                  <div style="display:flex; gap:0.75rem; align-items:flex-start;">
+                    <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-describedby</code>
+                    <span style="font-size:0.75rem; color:#555770;">Liga instrução adicional ao campo</span>
+                  </div>
+                  <div style="display:flex; gap:0.75rem; align-items:flex-start;">
+                    <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-invalid</code>
+                    <span style="font-size:0.75rem; color:#555770;">Sinaliza estado de erro após validação</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SEÇÃO 4 – XHTML ESTRITO
+             ============================================================ -->
+        <section id="xhtml" aria-labelledby="sec4-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">4</span>
+            <h2 id="sec4-title" class="section-title">Rigor Sintático XHTML Strict</h2>
+          </div>
+          <p class="section-desc">XHTML é processado como XML — erros de sintaxe causam falha fatal de parsing, não degradação graciosa.</p>
+          <div class="section-divider"></div>
+
+          <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+            
+            <!-- Fechamento de tags vazias -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; color:#071D41; margin-bottom:0.75rem;">Fechamento de tags vazias</h3>
+              <div style="margin-bottom:0.5rem;">
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#168821; margin-bottom:0.25rem;">✓ Correto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#EAF4EC; color:#0D5A1B; font-family:'JetBrains Mono',monospace;">&lt;img src="..." alt="..." /&gt;</code>
+              </div>
+              <div>
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin-bottom:0.25rem;">✗ Incorreto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#FEF0EF; color:#B30000; font-family:'JetBrains Mono',monospace;">&lt;img src="..." alt="..."&gt;</code>
+              </div>
+              <div style="margin-top:0.5rem; font-size:0.65rem; padding:0.25rem 0.5rem; border-radius:4px; background:#F0F4FA; color:#555770;">Aplica-se a: br, hr, input, link, meta</div>
+            </div>
+
+            <!-- Atributos booleanos -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; color:#071D41; margin-bottom:0.75rem;">Atributos booleanos explícitos</h3>
+              <div style="margin-bottom:0.5rem;">
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#168821; margin-bottom:0.25rem;">✓ Correto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#EAF4EC; color:#0D5A1B; font-family:'JetBrains Mono',monospace;">disabled="disabled"</code>
+              </div>
+              <div>
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin-bottom:0.25rem;">✗ Incorreto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#FEF0EF; color:#B30000; font-family:'JetBrains Mono',monospace;">disabled</code>
+              </div>
+              <div style="margin-top:0.5rem; font-size:0.65rem; padding:0.25rem 0.5rem; border-radius:4px; background:#F0F4FA; color:#555770;">Aplica-se a: checked, readonly, selected</div>
+            </div>
+
+            <!-- Case-sensitive -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; color:#071D41; margin-bottom:0.75rem;">Case-sensitive (minúsculas)</h3>
+              <div style="margin-bottom:0.5rem;">
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#168821; margin-bottom:0.25rem;">✓ Correto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#EAF4EC; color:#0D5A1B; font-family:'JetBrains Mono',monospace;">&lt;div class="..."&gt;</code>
+              </div>
+              <div>
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin-bottom:0.25rem;">✗ Incorreto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#FEF0EF; color:#B30000; font-family:'JetBrains Mono',monospace;">&lt;DIV CLASS="..."&gt;</code>
+              </div>
+              <div style="margin-top:0.5rem; font-size:0.65rem; padding:0.25rem 0.5rem; border-radius:4px; background:#F0F4FA; color:#555770;">Aplica-se a: Tags e atributos</div>
+            </div>
+
+            <!-- Aninhamento -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; color:#071D41; margin-bottom:0.75rem;">Aninhamento correto</h3>
+              <div style="margin-bottom:0.5rem;">
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#168821; margin-bottom:0.25rem;">✓ Correto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#EAF4EC; color:#0D5A1B; font-family:'JetBrains Mono',monospace;">&lt;ul&gt;&lt;li&gt;Item&lt;/li&gt;&lt;/ul&gt;</code>
+              </div>
+              <div>
+                <div style="font-size:0.6rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#E52207; margin-bottom:0.25rem;">✗ Incorreto</div>
+                <code style="display:block; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.75rem; background:#FEF0EF; color:#B30000; font-family:'JetBrains Mono',monospace;">&lt;ul&gt;&lt;li&gt;Item&lt;/ul&gt;&lt;/li&gt;</code>
+              </div>
+              <div style="margin-top:0.5rem; font-size:0.65rem; padding:0.25rem 0.5rem; border-radius:4px; background:#F0F4FA; color:#555770;">Aplica-se a: Ordem inversa de fechamento</div>
+            </div>
+          </div>
+
+          <!-- CDATA -->
+          <div class="card">
+            <div class="card-header">
+              <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin:0;">Seções CDATA para Scripts</h3>
+              <span class="badge-success">✓ Correto</span>
+            </div>
+            <pre class="code-block"><span class="token-tag">&lt;script</span> <span class="token-attr">type</span>=<span class="token-val">"text/javascript"</span><span class="token-tag">&gt;</span>
+<span class="token-comment">/* &lt;![CDATA[ */</span>
+  <span class="token-comment">// O parser XML trata CDATA como texto literal</span>
+  <span class="token-comment">// Operadores &lt; e &amp;&amp; não causam erro no parser XML</span>
+  function validarPrecisao(HDOP) {
+    if (HDOP &lt; 5.0 &amp;&amp; HDOP &gt; 0) {
+      console.log(<span class="token-val">"Precisão ótima: "</span> + HDOP);
+    }
+  }
+<span class="token-comment">/* ]]&gt; */</span>
+<span class="token-tag">&lt;/script&gt;</span></pre>
+
+            <div class="grid-3" style="margin-top:0.75rem;">
+              <div style="padding:0.75rem; border-radius:4px; font-size:0.75rem; background:#F0F4FA;">
+                <code style="display:block; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.875rem; color:#1351B4; margin-bottom:0.25rem;">&lt; &gt;</code>
+                <div style="color:#071D41;">Operadores de comparação</div>
+                <div style="color:#168821;">→ Protegidos por CDATA</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; font-size:0.75rem; background:#F0F4FA;">
+                <code style="display:block; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.875rem; color:#1351B4; margin-bottom:0.25rem;">&amp;&amp;</code>
+                <div style="color:#071D41;">Operador lógico AND</div>
+                <div style="color:#168821;">→ Não causa falha de parsing</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; font-size:0.75rem; background:#F0F4FA;">
+                <code style="display:block; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.875rem; color:#1351B4; margin-bottom:0.25rem;">"..."</code>
+                <div style="color:#071D41;">Strings com aspas</div>
+                <div style="color:#168821;">→ Seguro dentro de CDATA</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SEÇÃO 5 – WAI-ARIA
+             ============================================================ -->
+        <section id="aria" aria-labelledby="sec5-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">5</span>
+            <h2 id="sec5-title" class="section-title">Atributos de Acessibilidade WAI-ARIA</h2>
+          </div>
+          <p class="section-desc">ARIA estende a semântica HTML para componentes dinâmicos que leitores de tela não interpretam por padrão.</p>
+          <div class="section-divider"></div>
+
+          <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+
+            <!-- GNSS com aria-live -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Demo: Captura GNSS com aria-live</h3>
+              <div role="region" aria-labelledby="gnss-title" style="padding:1rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; color:#071D41;">
+                  <span aria-hidden="true">📡</span>
+                  <span id="gnss-title">Captura de Coordenadas GNSS</span>
+                </div>
+
+                <!-- Região viva -->
+                <div aria-live="polite" aria-atomic="true" style="margin-bottom:0.75rem;">
+                  <div id="gnss-status" class="gnss-status-ok" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.375rem 0.75rem; border-radius:4px; font-size:0.875rem; font-weight:500; border:1px solid;">
+                    <span aria-hidden="true">✅</span>
+                    <span>Precisão: <span id="gnss-precisao">Ótima</span> (HDOP: <span id="gnss-hdop">2.1</span>)</span>
+                  </div>
+                </div>
+
+                <!-- Barra de progresso COM ANIMAÇÃO -->
+                <div style="margin-bottom:0.75rem;">
+                  <div id="gnss-progressbar" role="progressbar" 
+                       aria-valuenow="85" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100" 
+                       aria-label="Progresso da captura de sinal" 
+                       class="progress-bar">
+                    <div id="gnss-progress-fill" class="progress-fill" style="width:85%;"></div>
+                  </div>
+                  <div id="gnss-progress-text" style="font-size:0.75rem; margin-top:0.25rem; text-align:right; font-family:'JetBrains Mono',monospace; color:#555770;">85%</div>
+                </div>
+
+                <button type="button" 
+                        class="btn-primary" 
+                        id="btn-capturar"
+                        aria-label="Iniciar captura de coordenadas GNSS">
+                  📡 Iniciar Captura
+                </button>
+              </div>
+
+              <div style="margin-top:0.75rem; display:flex; flex-direction:column; gap:0.375rem;">
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-live="polite"</code>
+                  <span style="color:#555770;">Atualizações anunciadas após interação atual terminar</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-atomic="true"</code>
+                  <span style="color:#555770;">A região inteira é lida ao atualizar, não só o diff</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">role="progressbar"</code>
+                  <span style="color:#555770;">Identifica barra de progresso para tecnologias assistivas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion com aria-expanded (INTERATIVO) -->
+            <div class="card">
+              <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Demo: Acordeão com aria-expanded</h3>
+              <div style="border:1px solid #C5D4EB; border-radius:4px; overflow:hidden;">
+                <button type="button" 
+                        id="btn-ajuda-gnss" 
+                        aria-expanded="false" 
+                        aria-controls="ajuda-gnss" 
+                        style="width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1rem; text-align:left; font-weight:500; font-size:0.875rem; background:#FFFFFF; color:#071D41; border:none; cursor:pointer; transition:background 0.2s;">
+                  <span>📖 Como funciona a captura de coordenadas?</span>
+                  <span id="icon-ajuda" style="transition:transform 0.3s; color:#1351B4; display:inline-block;">▼</span>
+                </button>
+                <div id="ajuda-gnss" 
+                     role="region" 
+                     aria-labelledby="btn-ajuda-gnss" 
+                     hidden="hidden" 
+                     style="padding:0 1rem 1rem 1rem; background:#F8FAFC; border-top:1px solid #C5D4EB;">
+                  <p style="font-size:0.875rem; color:#555770; margin-bottom:0.75rem;">
+                    A captura utiliza o receptor GNSS integrado ao DMC. A qualidade é medida pelo HDOP:
+                  </p>
+                  <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.5rem;">
+                    <li style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.75rem; border-radius:4px; background:#EAF4EC;">
+                      <code style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; font-weight:700; color:#168821;">HDOP &lt; 5.0</code>
+                      <span style="font-size:0.75rem; color:#168821;">Precisão ótima</span>
+                    </li>
+                    <li style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.75rem; border-radius:4px; background:#FFF8E1;">
+                      <code style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; font-weight:700; color:#916A00;">HDOP 5.0–10.0</code>
+                      <span style="font-size:0.75rem; color:#916A00;">Precisão aceitável</span>
+                    </li>
+                    <li style="display:flex; align-items:center; gap:0.75rem; padding:0.5rem 0.75rem; border-radius:4px; background:#FEF0EF;">
+                      <code style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; font-weight:700; color:#E52207;">HDOP &gt; 10.0</code>
+                      <span style="font-size:0.75rem; color:#E52207;">Precisão insuficiente</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style="margin-top:0.75rem; display:flex; flex-direction:column; gap:0.375rem;">
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-expanded</code>
+                  <span style="color:#555770;">true = visível, false = oculto — leitores de tela anunciam o estado</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-controls</code>
+                  <span style="color:#555770;">Conecta o botão ao elemento que ele controla (pelo id)</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">role="region"</code>
+                  <span style="color:#555770;">Identifica a área do conteúdo expansível como landmark</span>
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-start; font-size:0.75rem;">
+                  <code style="flex-shrink:0; font-size:0.6rem; font-family:'JetBrains Mono',monospace; padding:0.125rem 0.375rem; border-radius:2px; background:#1351B4; color:#FFFFFF;">aria-labelledby</code>
+                  <span style="color:#555770;">Associa a região ao botão que a controla, por id</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             SEÇÃO 6 – CHECKLIST
+             ============================================================ -->
+        <section id="checklist" aria-labelledby="sec6-title" class="section-spacing section-highlight">
+          <div class="section-header">
+            <span class="section-number">6</span>
+            <h2 id="sec6-title" class="section-title">Checklist de Conformidade e-MAG 3.1</h2>
+          </div>
+          <p class="section-desc">Resumo consolidado de todos os critérios de marcação avaliados.</p>
+          <div class="section-divider"></div>
+
+          <!-- Resumo -->
+          <div class="card" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+            <div style="display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap;">
+              <div style="flex-shrink:0;">
+                <div style="width:5rem; height:5rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem; color:#FFFFFF; background:#168821; border:4px solid #0D5A1B; animation:pulse-ring 2s infinite;">100%</div>
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:1.25rem; color:#071D41;">15/15 critérios conformes</div>
+                <div style="font-size:0.875rem; margin-top:0.25rem; color:#555770;">e-MAG 3.1 · Área de Marcação · WCAG 2.2 Nível AA</div>
+                <div style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                  <span class="badge-info">e-MAG 3.1</span>
+                  <span class="badge-info">XHTML 1.0 Strict</span>
+                  <span class="badge-info">WAI-ARIA 1.2</span>
+                  <span class="badge-info">WCAG 2.2 AA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid de Check (condensado para brevidade – mantido igual ao original) -->
+          <div class="grid-2" style="display:grid; grid-template-columns:1fr; gap:1rem;">
+            
+            <!-- Estrutura -->
+            <div class="card">
+              <h4 style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Estrutura</h4>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Declaração de Idioma</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">lang e xml:lang no &lt;html&gt;</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Estrutura de Regiões</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">header, nav, main, footer</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Landmarks</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">role="banner", "navigation", "main", "contentinfo"</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Títulos -->
+            <div class="card">
+              <h4 style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Títulos</h4>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Hierarquia de Títulos</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">h1 → h2 → h3... sem saltos</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Encapsulamento de Texto</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">Texto em p ou div, não direto no body</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulários -->
+            <div class="card">
+              <h4 style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Formulários</h4>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Associação Label/ID</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">label for="id" e input id="id"</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Vedação de Placeholders</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">placeholder não substitui label</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Agrupamento Lógico</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">fieldset e legend para grupos</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- XHTML -->
+            <div class="card">
+              <h4 style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">XHTML</h4>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Fechamento de Tags</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">br /, img /, input /</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Case Sensitivity</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">Tags e atributos em minúsculas</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Atributos Booleanos</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">disabled="disabled", checked="checked"</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Seções CDATA</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">Scripts com /* &lt;![CDATA[ */</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- WAI-ARIA -->
+            <div class="card">
+              <h4 style="font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">WAI-ARIA</h4>
+              <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Regiões Vivas</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">aria-live para conteúdo dinâmico</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Estado Expansível</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">aria-expanded em toggles e accordions</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #F0F4FA;">
+                  <span style="flex-shrink:0; margin-top:0.125rem; width:1.25rem; height:1.25rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#FFFFFF; background:#168821;">✓</span>
+                  <div style="flex:1;">
+                    <div style="font-size:0.875rem; font-weight:500; color:#071D41;">Unicidade de IDs</div>
+                    <div style="font-size:0.75rem; font-family:'JetBrains Mono',monospace; color:#555770;">IDs únicos em todo o documento</div>
+                  </div>
+                  <span class="badge-success" style="flex-shrink:0;">Conforme</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Referências -->
+          <div class="card" style="margin-top:1.5rem;">
+            <h3 style="font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#1351B4; margin-bottom:0.75rem;">Referências Normativas</h3>
+            <div class="grid-3" style="display:grid; grid-template-columns:1fr; gap:0.75rem;">
+              <div style="padding:0.75rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; color:#071D41;">e-MAG 3.1</div>
+                <div style="font-size:0.6rem; font-family:'JetBrains Mono',monospace; margin-top:0.125rem; color:#1351B4;">emag.governoeletronico.gov.br</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem; color:#555770;">Padrões de acessibilidade Gov</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; color:#071D41;">DSGov Componentes</div>
+                <div style="font-size:0.6rem; font-family:'JetBrains Mono',monospace; margin-top:0.125rem; color:#1351B4;">gov.br/ds/componentes</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem; color:#555770;">Sistema de Design do Governo</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; color:#071D41;">WCAG 2.2</div>
+                <div style="font-size:0.6rem; font-family:'JetBrains Mono',monospace; margin-top:0.125rem; color:#1351B4;">w3.org/TR/WCAG22</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem; color:#555770;">Diretrizes de acessibilidade W3C</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; color:#071D41;">XHTML 1.0 Strict</div>
+                <div style="font-size:0.6rem; font-family:'JetBrains Mono',monospace; margin-top:0.125rem; color:#1351B4;">w3.org/TR/xhtml1</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem; color:#555770;">Especificação W3C XHTML</div>
+              </div>
+              <div style="padding:0.75rem; border-radius:4px; background:#F0F4FA;">
+                <div style="font-weight:600; font-size:0.875rem; color:#071D41;">WAI-ARIA APG</div>
+                <div style="font-size:0.6rem; font-family:'JetBrains Mono',monospace; margin-top:0.125rem; color:#1351B4;">w3.org/WAI/ARIA/apg</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem; color:#555770;">Práticas de autoria ARIA</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div> <!-- end layout-main -->
+    </div> <!-- end layout-with-sidebar -->
+  </div> <!-- end container -->
+</main>
+
+<!-- ============================================================
+     FOOTER (role="contentinfo") – e-MAG Área de Marcação
+     ============================================================ -->
+<footer role="contentinfo" style="margin-top:3rem; border-top:1px solid #1351B4; background:#071D41; padding:1.5rem 0;">
+  <div class="container">
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:1rem; text-align:center;">
+      <div style="font-size:0.875rem; color:#93B8E8;">Guia e-MAG 3.1 · Sistema de Design do Governo Federal</div>
+      <div style="display:flex; gap:1rem; font-size:0.75rem; color:#555A75; flex-wrap:wrap; justify-content:center;">
+        <span>e-MAG 3.1</span>
+        <span>·</span>
+        <span>DSGov</span>
+        <span>·</span>
+        <span>WCAG 2.2 AA</span>
+        <span>·</span>
+        <span>WAI-ARIA 1.2</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT PARA COMPONENTES INTERATIVOS
+     ============================================================ -->
+<script type="text/javascript">
+/* <![CDATA[ */
+  (function() {
+    'use strict';
+    
+    // ============================================================
+    // 1. ACCORDION com aria-expanded
+    // ============================================================
+    var btnAjuda = document.getElementById('btn-ajuda-gnss');
+    var conteudoAjuda = document.getElementById('ajuda-gnss');
+    var iconAjuda = document.getElementById('icon-ajuda');
+    
+    if (btnAjuda && conteudoAjuda) {
+      btnAjuda.addEventListener('click', function() {
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !expanded);
+        conteudoAjuda.hidden = expanded;
+        if (iconAjuda) {
+          iconAjuda.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+      });
+    }
+    
+    // ============================================================
+    // 2. SCROLLSPY – destaque ativo no sidebar e header
+    // ============================================================
+    var sections = document.querySelectorAll('section[id]');
+    var navLinks = document.querySelectorAll('.sidebar-nav a, .site-nav a');
+    var sectionIds = [];
+    sections.forEach(function(section) {
+      sectionIds.push(section.id);
+    });
+    
+    function updateActiveLink() {
+      var scrollY = window.scrollY || window.pageYOffset || 0;
+      var offset = 150; // margem para ativação antecipada
+      var currentId = null;
+      
+      sections.forEach(function(section) {
+        var rect = section.getBoundingClientRect();
+        if (rect.top <= offset) {
+          currentId = section.id;
+        }
+      });
+      
+      navLinks.forEach(function(link) {
+        link.classList.remove('active');
+        var href = link.getAttribute('href');
+        if (href && href === '#' + currentId) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', updateActiveLink);
+    window.addEventListener('load', updateActiveLink);
+    updateActiveLink();
+    
+    // ============================================================
+    // 3. MENU MOBILE (hamburger) com aria-expanded
+    // ============================================================
+    var menuToggle = document.querySelector('.menu-toggle');
+    var siteNav = document.getElementById('site-nav-header');
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener('click', function() {
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!expanded));
+        siteNav.classList.toggle('open', !expanded);
+        this.title = expanded ? 'Abrir menu de navegação' : 'Fechar menu de navegação';
+      });
+      // Fecha o menu ao clicar em um link
+      siteNav.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          siteNav.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menuToggle.title = 'Abrir menu de navegação';
+        });
+      });
+    }
+
+    // ============================================================
+    // 4. BOTÃO DE CAPTURA GNSS – simulação de progresso + HDOP
+    // ============================================================
+    var btnCapturar = document.getElementById('btn-capturar');
+    var progressBar = document.getElementById('gnss-progress-fill');
+    var progressText = document.getElementById('gnss-progress-text');
+    var progressbarRole = document.getElementById('gnss-progressbar');
+    var statusBox = document.getElementById('gnss-status');
+    var precSpan = document.getElementById('gnss-precisao');
+    var hdopSpan = document.getElementById('gnss-hdop');
+
+    function setStatus(hdop) {
+      if (!statusBox || !precSpan || !hdopSpan) return;
+      var label, cls, icon;
+      if (hdop < 5) { label = 'Ótima'; cls = 'gnss-status-ok'; icon = '✅'; }
+      else if (hdop <= 10) { label = 'Aceitável'; cls = 'gnss-status-aceitavel'; icon = '⚠️'; }
+      else { label = 'Insuficiente'; cls = 'gnss-status-insuficiente'; icon = '⛔'; }
+      precSpan.textContent = label;
+      hdopSpan.textContent = hdop.toFixed(1);
+      statusBox.className = cls;
+      var iconSpan = statusBox.querySelector('span[aria-hidden="true"]');
+      if (iconSpan) iconSpan.textContent = icon;
+    }
+
+    if (btnCapturar) {
+      btnCapturar.addEventListener('click', function() {
+        if (!progressBar) return;
+        var btn = this;
+        btn.disabled = true;
+        btn.textContent = '⏳ Capturando...';
+        var progress = 0;
+        if (progressbarRole) progressbarRole.setAttribute('aria-valuenow', '0');
+        progressBar.style.width = '0%';
+        if (progressText) progressText.textContent = '0%';
+
+        var interval = setInterval(function() {
+          var hdop = +(Math.random() * 12 + 1).toFixed(1);
+          setStatus(hdop);
+          progress += 5;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            btn.disabled = false;
+            btn.textContent = '📡 Capturar Novamente';
+          }
+          progressBar.style.width = progress + '%';
+          if (progressText) progressText.textContent = progress + '%';
+          if (progressbarRole) progressbarRole.setAttribute('aria-valuenow', String(progress));
+        }, 150);
+      });
+    }
+
+  })();
+/* ]]> */
+</script>
+
+</body>
+</html>

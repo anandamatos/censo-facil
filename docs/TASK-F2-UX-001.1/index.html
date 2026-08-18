@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Censo Fácil — Mapeamento de Design Tokens</title>
+<style>
+  :root{
+    --color-primary-pure:#0033A0;
+    --color-primary-dark:#002680;
+    --color-primary-light:#3366CC;
+    --color-secondary-pure:#FFFFFF;
+    --color-neutral-light:#F5F5F5;
+    --color-neutral-medium:#C5D4EB;
+    --color-neutral-dark:#071D41;
+    --color-text-primary:#1C1C1E;
+    --color-text-secondary:#555770;
+    --color-success:#4CAF50;
+    --color-warning:#F5A623;
+    --color-error:#E53935;
+    --color-info:#2196F3;
+
+    --spacing-xs:4px;
+    --spacing-sm:8px;
+    --spacing-md:16px;
+    --spacing-lg:24px;
+    --spacing-xl:32px;
+    --spacing-xxl:48px;
+
+    --elevation-sm:0 2px 4px rgba(0,0,0,0.08);
+    --elevation-md:0 4px 12px rgba(19,81,180,0.08);
+    --elevation-lg:0 8px 24px rgba(0,0,0,0.12);
+
+    --font-base:"Helvetica Neue","Arial",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font-base);
+    color:var(--color-text-primary);
+    background:var(--color-secondary-pure);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+
+  /* ===== Skip link / focus ===== */
+  .skip-link{
+    position:absolute; left:-999px; top:auto;
+    background:var(--color-primary-pure); color:#fff;
+    padding:var(--spacing-sm) var(--spacing-md);
+    z-index:1000; border-radius:4px;
+  }
+  .skip-link:focus{ left:var(--spacing-md); top:var(--spacing-md); }
+  :focus-visible{
+    outline:3px solid var(--color-primary-light);
+    outline-offset:2px;
+  }
+
+  /* ===== Layout shell ===== */
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 var(--spacing-lg); }
+  section{ padding:var(--spacing-xxl) 0; }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--color-primary-pure);
+    display:flex; align-items:center; gap:var(--spacing-sm);
+    margin-bottom:var(--spacing-sm);
+  }
+  .eyebrow::before{
+    content:"";
+    width:24px; height:2px;
+    background:var(--color-primary-pure);
+    display:inline-block;
+  }
+  h1,h2,h3{ font-family:var(--font-base); color:var(--color-neutral-dark); margin:0; }
+  h2{ font-size:1.5rem; font-weight:700; }
+  p{ line-height:1.65; color:var(--color-text-secondary); }
+  .lede{ font-size:1.0625rem; max-width:62ch; }
+
+  /* ===== Header / Nav ===== */
+  header.site{
+    position:sticky; top:0; z-index:100;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--color-neutral-medium);
+  }
+  .nav{
+    max-width:1120px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:var(--spacing-sm) var(--spacing-lg);
+  }
+  .brand{ display:flex; align-items:center; gap:var(--spacing-sm); font-weight:700; color:var(--color-neutral-dark); }
+  .brand .mark{
+    width:28px; height:28px; border-radius:6px;
+    background:linear-gradient(135deg,var(--color-primary-pure),var(--color-primary-light));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:var(--font-mono); font-size:0.7rem; font-weight:700;
+  }
+  .nav-links{ display:flex; gap:var(--spacing-lg); font-size:0.875rem; list-style:none; padding:0; margin:0; }
+  .nav-links a{ text-decoration:none; color:var(--color-text-secondary); }
+  .nav-links a:hover{ color:var(--color-primary-pure); }
+  @media (max-width:760px){ .nav-links{ display:none; } }
+
+  /* ===== Hero ===== */
+  .hero{
+    background:
+      radial-gradient(circle at 82% -10%, rgba(51,102,204,0.16), transparent 55%),
+      var(--color-secondary-pure);
+    padding-top:var(--spacing-xxl);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{ position:relative; z-index:2; }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:var(--spacing-xxl);
+    align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero h1{
+    font-size:clamp(2.2rem,4.4vw,3.2rem);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin-bottom:var(--spacing-md);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--color-primary-pure);
+    background:linear-gradient(180deg,transparent 62%, rgba(51,102,204,0.18) 62%);
+  }
+  .hero-meta{
+    display:flex; gap:var(--spacing-lg); margin-top:var(--spacing-xl);
+    font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-secondary);
+  }
+  .hero-meta div{ padding-left:var(--spacing-md); border-left:2px solid var(--color-neutral-medium); }
+  .hero-meta b{ display:block; color:var(--color-neutral-dark); font-family:var(--font-base); font-size:0.9375rem; }
+
+  /* Hero token demo card — the signature element */
+  .token-scope{
+    background:var(--color-neutral-dark);
+    border-radius:14px;
+    padding:var(--spacing-lg);
+    box-shadow:var(--elevation-lg);
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:#C5D4EB;
+    position:relative;
+  }
+  .token-scope::before{
+    content:"gnss-status.css";
+    position:absolute; top:-11px; left:16px;
+    background:var(--color-primary-pure); color:#fff;
+    padding:2px 10px; border-radius:4px; font-size:0.625rem; letter-spacing:0.05em;
+  }
+  .token-scope .row{ display:flex; align-items:center; gap:var(--spacing-sm); padding:var(--spacing-xs) 0; }
+  .token-scope .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+  .token-scope .hdop{
+    margin-top:var(--spacing-md); padding-top:var(--spacing-md);
+    border-top:1px dashed rgba(197,212,235,0.25);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .hdop-badge{
+    font-family:var(--font-base); font-weight:700; font-size:0.8125rem;
+    padding:6px 12px; border-radius:20px;
+    background:var(--color-success); color:#06210a;
+  }
+
+  /* ===== Section headers ===== */
+  .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--spacing-lg); margin-bottom:var(--spacing-xl); flex-wrap:wrap; }
+  .section-head p{ margin:var(--spacing-xs) 0 0; }
+
+  /* ===== Pillars ===== */
+  .pillars{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--spacing-md); }
+  @media (max-width:900px){ .pillars{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .pillars{ grid-template-columns:1fr; } }
+  .pillar{
+    background:var(--color-neutral-light);
+    border:1px solid var(--color-neutral-medium);
+    border-radius:10px;
+    padding:var(--spacing-md);
+  }
+  .pillar .num{ font-family:var(--font-mono); color:var(--color-primary-pure); font-size:0.75rem; }
+  .pillar h3{ font-size:0.9375rem; margin:var(--spacing-xs) 0; }
+  .pillar p{ font-size:0.8125rem; margin:0; }
+
+  /* ===== Colors ===== */
+  .swatch-group{ margin-bottom:var(--spacing-xl); }
+  .swatch-group h3{ font-size:0.9375rem; color:var(--color-text-secondary); font-weight:700; text-transform:uppercase; letter-spacing:0.05em; font-size:0.75rem; margin-bottom:var(--spacing-md); }
+  .swatches{ display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:var(--spacing-md); }
+  .swatch{
+    border:1px solid var(--color-neutral-medium);
+    border-radius:10px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:var(--elevation-sm);
+  }
+  .swatch-fill{ height:72px; }
+  .swatch-info{ padding:var(--spacing-sm) var(--spacing-md) var(--spacing-md); }
+  .swatch-info .name{ font-family:var(--font-mono); font-size:0.75rem; color:var(--color-neutral-dark); display:block; }
+  .swatch-info .hex{ font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-secondary); }
+  .swatch-info .use{ font-size:0.75rem; margin-top:var(--spacing-xs); color:var(--color-text-secondary); }
+
+  /* ===== Typography ===== */
+  .type-scale{ display:flex; flex-direction:column; gap:var(--spacing-md); }
+  .type-row{
+    display:grid; grid-template-columns:120px 1fr 90px; align-items:baseline;
+    gap:var(--spacing-md); padding:var(--spacing-md) 0; border-bottom:1px solid var(--color-neutral-medium);
+  }
+  @media (max-width:640px){ .type-row{ grid-template-columns:1fr; gap:4px; } }
+  .type-row .token{ font-family:var(--font-mono); font-size:0.75rem; color:var(--color-primary-pure); }
+  .type-row .sample{ color:var(--color-neutral-dark); font-weight:700; }
+  .type-row .meta{ font-family:var(--font-mono); font-size:0.6875rem; color:var(--color-text-secondary); text-align:right; }
+  .font-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--spacing-md); margin-top:var(--spacing-xl); }
+  @media (max-width:640px){ .font-cards{ grid-template-columns:1fr; } }
+  .font-card{ background:var(--color-neutral-light); border:1px solid var(--color-neutral-medium); border-radius:10px; padding:var(--spacing-lg); }
+  .font-card .big{ font-size:1.75rem; color:var(--color-neutral-dark); margin-bottom:var(--spacing-xs); }
+  .font-card .big.i{ font-style:italic; }
+  .font-card .big.b{ font-weight:700; }
+  .font-card .label{ font-family:var(--font-mono); font-size:0.6875rem; color:var(--color-primary-pure); text-transform:uppercase; letter-spacing:0.05em; }
+
+  /* ===== Spacing / Grid ===== */
+  .spacing-demo{ display:flex; align-items:flex-end; gap:var(--spacing-md); flex-wrap:wrap; margin-bottom:var(--spacing-xl); }
+  .spacing-bar-wrap{ text-align:center; }
+  .spacing-bar{ background:var(--color-primary-pure); border-radius:3px 3px 0 0; width:32px; }
+  .spacing-bar-wrap .lbl{ font-family:var(--font-mono); font-size:0.6875rem; margin-top:var(--spacing-xs); color:var(--color-text-secondary); }
+  .grid-demo{ display:grid; gap:var(--spacing-lg); }
+  .device{ border:1px solid var(--color-neutral-medium); border-radius:12px; padding:var(--spacing-md); background:var(--color-neutral-light); }
+  .device h4{ margin:0 0 var(--spacing-sm); font-size:0.8125rem; color:var(--color-neutral-dark); }
+  .cols{ display:grid; gap:16px; }
+  .cols div{ background:var(--color-primary-light); opacity:0.35; height:36px; border-radius:4px; }
+  .device.phone .cols{ grid-template-columns:repeat(4,1fr); }
+  .device.tablet .cols{ grid-template-columns:repeat(8,1fr); }
+
+  /* ===== Target size ===== */
+  .targets{ display:flex; gap:var(--spacing-xl); align-items:center; flex-wrap:wrap; }
+  .target-demo{ display:flex; flex-direction:column; align-items:center; gap:var(--spacing-sm); }
+  .target-box{ background:var(--color-primary-pure); border-radius:8px; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.6875rem; }
+  .target-box.std{ width:24px; height:24px; font-size:0; }
+  .target-box.crit{ width:48px; height:48px; }
+  .target-demo .cap{ font-size:0.75rem; color:var(--color-text-secondary); text-align:center; max-width:120px; }
+
+  /* ===== States ===== */
+  .states-table{ width:100%; border-collapse:collapse; font-size:0.875rem; }
+  .states-table th{ text-align:left; font-family:var(--font-mono); font-size:0.6875rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-text-secondary); padding:var(--spacing-sm) var(--spacing-md); border-bottom:2px solid var(--color-neutral-dark); }
+  .states-table td{ padding:var(--spacing-md); border-bottom:1px solid var(--color-neutral-medium); vertical-align:middle; }
+  .btn-demo{ font-family:var(--font-base); font-weight:700; font-size:0.8125rem; padding:8px 18px; border-radius:6px; border:none; color:#fff; cursor:pointer; }
+
+  /* ===== Elevation ===== */
+  .elevation-demo{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--spacing-lg); }
+  @media (max-width:700px){ .elevation-demo{ grid-template-columns:1fr; } }
+  .elev-card{ background:#fff; border-radius:10px; padding:var(--spacing-lg); text-align:center; }
+  .elev-card .sm{ box-shadow:var(--elevation-sm); }
+  .elev-card h4{ margin:var(--spacing-md) 0 var(--spacing-xs); font-size:0.875rem; color:var(--color-neutral-dark); }
+  .elev-card p{ font-size:0.75rem; margin:0; }
+  .elev-card.a{ box-shadow:var(--elevation-sm); }
+  .elev-card.b{ box-shadow:var(--elevation-md); }
+  .elev-card.c{ box-shadow:var(--elevation-lg); }
+
+  /* ===== Semantic feedback strip ===== */
+  .feedback-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--spacing-md); }
+  @media (max-width:760px){ .feedback-strip{ grid-template-columns:repeat(2,1fr); } }
+  .feedback-card{ border-radius:10px; padding:var(--spacing-md); color:#fff; }
+  .feedback-card .icon{ font-family:var(--font-mono); font-size:1.25rem; }
+  .feedback-card .t{ font-weight:700; margin-top:var(--spacing-xs); font-size:0.875rem; }
+  .feedback-card .d{ font-size:0.75rem; opacity:0.92; margin-top:2px; }
+
+  /* ===== Validation / conformity ===== */
+  .conform-list{ list-style:none; margin:0; padding:0; display:grid; gap:var(--spacing-sm); }
+  .conform-list li{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--color-neutral-light); border:1px solid var(--color-neutral-medium);
+    border-radius:8px; padding:var(--spacing-md);
+    font-size:0.875rem;
+  }
+  .conform-list b{ color:var(--color-neutral-dark); }
+  .freq{ font-family:var(--font-mono); font-size:0.6875rem; color:#fff; background:var(--color-primary-pure); padding:4px 10px; border-radius:20px; }
+
+  /* ===== Principles / footer ===== */
+  .principles{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--spacing-lg); counter-reset:p; }
+  @media (max-width:900px){ .principles{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .principles{ grid-template-columns:1fr; } }
+  .principle{ position:relative; padding-top:var(--spacing-xl); }
+  .principle::before{
+    counter-increment:p; content:counter(p);
+    font-family:var(--font-mono); font-size:2rem; font-weight:700;
+    color:var(--color-neutral-medium); position:absolute; top:0; left:0;
+  }
+  .principle h3{ font-size:0.9375rem; margin-bottom:var(--spacing-xs); }
+  .principle p{ font-size:0.8125rem; margin:0; }
+
+  footer{
+    background:var(--color-neutral-dark); color:#C5D4EB; padding:var(--spacing-xxl) 0;
+  }
+  footer h2{ color:#fff; }
+  .refs{ columns:2; column-gap:var(--spacing-xl); font-size:0.8125rem; }
+  @media (max-width:640px){ .refs{ columns:1; } }
+  .refs li{ margin-bottom:var(--spacing-sm); break-inside:avoid; }
+  .refs a{ color:#9db4dd; text-decoration:none; }
+  .refs a:hover{ text-decoration:underline; }
+  .foot-meta{ display:flex; justify-content:space-between; margin-top:var(--spacing-xxl); padding-top:var(--spacing-lg); border-top:1px solid rgba(197,212,235,0.2); font-family:var(--font-mono); font-size:0.6875rem; color:#8ea3c9; flex-wrap:wrap; gap:var(--spacing-sm); }
+
+  .badge-ok{ display:inline-flex; align-items:center; gap:6px; background:rgba(76,175,80,0.15); color:#bfe6c1; border:1px solid rgba(76,175,80,0.4); padding:4px 10px; border-radius:20px; font-family:var(--font-mono); font-size:0.6875rem; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="site">
+  <nav class="nav">
+    <div class="brand"><span class="mark">IBGE</span> Censo Fácil · Tokens</div>
+    <ul class="nav-links">
+      <li><a href="#cores">Cores</a></li>
+      <li><a href="#tipografia">Tipografia</a></li>
+      <li><a href="#espacamento">Espaçamento</a></li>
+      <li><a href="#estados">Estados</a></li>
+      <li><a href="#validacao">Validação</a></li>
+      <li><a href="#referencias">Referências</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">DSGov 4.0 · MIV IBGE · WCAG 2.2 AA</div>
+          <h1>Design Tokens do <em>Censo Fácil</em></h1>
+          <p class="lede">A ponte entre a identidade visual institucional do IBGE e os padrões de Governo Digital — cor, tipografia, espaçamento e estados de interação prontos para campo, mesmo sob sol forte e conexão instável.</p>
+          <div class="hero-meta">
+            <div><b>v1.0</b>Versão</div>
+            <div><b>Ago 2026</b>Data</div>
+            <div><b>Validado</b>Status DSGov 4.0</div>
+          </div>
+        </div>
+
+        <!-- Signature element: a live "token in use" card mirroring the GNSS precision use case from the source doc -->
+        <div class="token-scope" aria-hidden="true">
+          <div class="row"><span class="dot" style="background:var(--color-primary-pure)"></span> --color-primary-pure: #0033A0;</div>
+          <div class="row"><span class="dot" style="background:var(--color-success)"></span> --color-success: #4CAF50;</div>
+          <div class="row"><span class="dot" style="background:var(--color-warning)"></span> --color-warning: #F5A623;</div>
+          <div class="row"><span class="dot" style="background:var(--color-error)"></span> --color-error: #E53935;</div>
+          <div class="hdop">
+            <span>precisão GNSS · HDOP 2.1m</span>
+            <span class="hdop-badge">ótima ●</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILARES -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Fundamentação</div>
+          <h2>Três pilares, mais um princípio de sigilo</h2>
+        </div>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="num">01</div>
+          <h3>Identidade Institucional</h3>
+          <p>Manual de Identidade Visual do IBGE — cores, tipografia e elementos de marca.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">02</div>
+          <h3>Padrões de Governo Digital</h3>
+          <p>DSGov 4.0 — componentes reutilizáveis, grids responsivas e acessibilidade.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">03</div>
+          <h3>Acessibilidade e Inclusão</h3>
+          <p>e-MAG 3.1 e WCAG 2.2 AA — contraste, legibilidade e operabilidade em campo.</p>
+        </div>
+        <div class="pillar">
+          <div class="num">04</div>
+          <h3>Privacidade e Sigilo</h3>
+          <p>Lei nº 5.534/68 e LGPD — proteção de dados e sigilo estatístico.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORES -->
+  <section id="cores" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 2</div>
+          <h2>Mapeamento de cores</h2>
+          <p>O Azul IBGE 286 C é a cor primária absoluta do sistema, responsável por transmitir credibilidade e autoridade em campo.</p>
+        </div>
+      </div>
+
+      <div class="swatch-group">
+        <h3>Paleta institucional primária</h3>
+        <div class="swatches">
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-primary-pure)"></div>
+            <div class="swatch-info"><span class="name">color-primary-pure</span><span class="hex">#0033A0 · Pantone 286 C</span><div class="use">Navegação, botões de ação, títulos institucionais</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-primary-dark)"></div>
+            <div class="swatch-info"><span class="name">color-primary-dark</span><span class="hex">#002680</span><div class="use">Hover e estados ativos</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-primary-light)"></div>
+            <div class="swatch-info"><span class="name">color-primary-light</span><span class="hex">#3366CC</span><div class="use">Fundos de destaque, elementos secundários</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="swatch-group">
+        <h3>Paleta neutra e funcional</h3>
+        <div class="swatches">
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-secondary-pure); border-bottom:1px solid var(--color-neutral-medium)"></div>
+            <div class="swatch-info"><span class="name">color-secondary-pure</span><span class="hex">#FFFFFF</span><div class="use">Fundo de telas, conteúdo limpo</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-neutral-light); border-bottom:1px solid var(--color-neutral-medium)"></div>
+            <div class="swatch-info"><span class="name">color-neutral-light</span><span class="hex">#F5F5F5</span><div class="use">Fundo de cards, separadores</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-neutral-medium)"></div>
+            <div class="swatch-info"><span class="name">color-neutral-medium</span><span class="hex">#C5D4EB</span><div class="use">Bordas, divisores, áreas inativas</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-neutral-dark)"></div>
+            <div class="swatch-info"><span class="name">color-neutral-dark</span><span class="hex">#071D41</span><div class="use">Textos principais e cabeçalhos</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-text-primary)"></div>
+            <div class="swatch-info"><span class="name">color-text-primary</span><span class="hex">#1C1C1E</span><div class="use">Corpo de texto (contraste ≥ 4.5:1)</div></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-fill" style="background:var(--color-text-secondary)"></div>
+            <div class="swatch-info"><span class="name">color-text-secondary</span><span class="hex">#555770</span><div class="use">Textos auxiliares e legendas</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="swatch-group">
+        <h3>Paleta semântica — feedback e estados</h3>
+        <div class="feedback-strip">
+          <div class="feedback-card" style="background:var(--color-success)">
+            <div class="icon">●</div>
+            <div class="t">color-success</div>
+            <div class="d">GNSS ótima (HDOP ≤ 2.5m), confirmações</div>
+          </div>
+          <div class="feedback-card" style="background:var(--color-warning)">
+            <div class="icon">▲</div>
+            <div class="t">color-warning</div>
+            <div class="d">Precisão aceitável, pendências de coleta</div>
+          </div>
+          <div class="feedback-card" style="background:var(--color-error)">
+            <div class="icon">✕</div>
+            <div class="t">color-error</div>
+            <div class="d">Erros críticos, bloqueio de registro (HDOP > 5.0m)</div>
+          </div>
+          <div class="feedback-card" style="background:var(--color-info)">
+            <div class="icon">i</div>
+            <div class="t">color-info</div>
+            <div class="d">Informações contextuais e dicas</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="max-width:70ch">Todos os tokens de texto respeitam a razão mínima de <b style="color:var(--color-neutral-dark)">4.5:1</b> contra o fundo, garantindo legibilidade sob luz solar intensa — critério e-MAG 3.1 e WCAG 2.2 (1.4.3).</p>
+    </div>
+  </section>
+
+  <!-- TIPOGRAFIA -->
+  <section id="tipografia">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 3</div>
+          <h2>Tipografia</h2>
+          <p>Família oficial <b style="color:var(--color-neutral-dark)">Univers</b> para toda a interface; a marca gráfica usa tipografia própria e restrita à logomarca.</p>
+        </div>
+      </div>
+
+      <div class="font-cards">
+        <div class="font-card">
+          <div class="big">Univers 55 Roman</div>
+          <div class="label">font-family-base · corpo de texto, parágrafos</div>
+        </div>
+        <div class="font-card">
+          <div class="big b">Univers 65 Bold</div>
+          <div class="label">font-family-bold · títulos, rótulos, botões</div>
+        </div>
+        <div class="font-card">
+          <div class="big i">Univers 55 Oblique</div>
+          <div class="label">font-family-italic · notas, citações de manuais</div>
+        </div>
+        <div class="font-card">
+          <div class="big b i">Univers 65 Bold Oblique</div>
+          <div class="label">font-family-bold-italic · títulos com ênfase</div>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xxl)">
+        <h3 style="font-size:0.9375rem; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:var(--spacing-sm)">Escala tipográfica</h3>
+        <div class="type-scale">
+          <div class="type-row"><span class="token">text-heading-1</span><span class="sample" style="font-size:2.5rem">Título de página</span><span class="meta">40px · Bold</span></div>
+          <div class="type-row"><span class="token">text-heading-2</span><span class="sample" style="font-size:1.5rem">Título de seção</span><span class="meta">24px · Bold</span></div>
+          <div class="type-row"><span class="token">text-heading-3</span><span class="sample" style="font-size:1.125rem">Subtítulo</span><span class="meta">18px · Bold</span></div>
+          <div class="type-row"><span class="token">text-body-large</span><span class="sample" style="font-size:1rem; font-weight:400">Corpo de texto principal</span><span class="meta">16px · Regular</span></div>
+          <div class="type-row"><span class="token">text-body-small</span><span class="sample" style="font-size:0.875rem; font-weight:400">Textos auxiliares</span><span class="meta">14px · Regular</span></div>
+          <div class="type-row"><span class="token">text-label</span><span class="sample" style="font-size:0.75rem; font-weight:500">RÓTULO DE CAMPO</span><span class="meta">12px · Medium</span></div>
+          <div class="type-row"><span class="token">text-caption</span><span class="sample" style="font-size:0.625rem; font-weight:400">Informação complementar</span><span class="meta">10px · Regular</span></div>
+        </div>
+        <p style="margin-top:var(--spacing-md)">O corpo de texto usa <b style="color:var(--color-neutral-dark)">16px (1rem)</b> como tamanho mínimo, assegurando a legibilidade exigida pelo e-MAG.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPAÇAMENTO E GRID -->
+  <section id="espacamento" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 4</div>
+          <h2>Espaçamento e grid</h2>
+          <p>Sistema de medidas em múltiplos de 8px, garantindo rigor geométrico entre design e desenvolvimento.</p>
+        </div>
+      </div>
+
+      <div class="spacing-demo">
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:4px"></div><div class="lbl">xs · 4px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:8px"></div><div class="lbl">sm · 8px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:16px"></div><div class="lbl">md · 16px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:24px"></div><div class="lbl">lg · 24px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:32px"></div><div class="lbl">xl · 32px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:48px"></div><div class="lbl">xxl · 48px</div></div>
+      </div>
+
+      <div class="grid-demo" style="grid-template-columns:1fr 1fr">
+        <div class="device phone">
+          <h4>Smartphone (retrato) — Produtor rural, Seu José</h4>
+          <div class="cols"><div></div><div></div><div></div><div></div></div>
+          <p style="margin:var(--spacing-sm) 0 0; font-size:0.75rem">4 colunas · margem 8px · medianiz 16px</p>
+        </div>
+        <div class="device tablet">
+          <h4>Tablet (paisagem) — Recenseadora Mariana / ACQ Carlos</h4>
+          <div class="cols"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <p style="margin:var(--spacing-sm) 0 0; font-size:0.75rem">8 colunas · margem 16px · medianiz 16px</p>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xxl)">
+        <h3 style="font-size:0.9375rem; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:var(--spacing-md)">Target size — área de toque (WCAG 2.5.8)</h3>
+        <div class="targets">
+          <div class="target-demo"><div class="target-box std">24</div><div class="cap">Alvos padrão — mínimo 24×24px CSS</div></div>
+          <div class="target-demo"><div class="target-box crit">48×48</div><div class="cap">Botões críticos no DMC — recomendado para uso em campo</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTADOS E ACESSIBILIDADE -->
+  <section id="estados">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 5</div>
+          <h2>Estados de interação e acessibilidade</h2>
+        </div>
+      </div>
+
+      <table class="states-table">
+        <thead>
+          <tr><th>Estado</th><th>Demonstração</th><th>Token</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Default</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-pure)">Enviar formulário</button></td>
+            <td>color-primary-pure</td>
+          </tr>
+          <tr>
+            <td>Hover</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-dark)">Enviar formulário</button></td>
+            <td>color-primary-dark</td>
+          </tr>
+          <tr>
+            <td>Focus</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-pure); outline:3px solid var(--color-primary-light); outline-offset:2px">Enviar formulário</button></td>
+            <td>contraste 3:1 (WCAG 2.4.11)</td>
+          </tr>
+          <tr>
+            <td>Active</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-light)">Enviar formulário</button></td>
+            <td>color-primary-light</td>
+          </tr>
+          <tr>
+            <td>Disabled</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-pure); opacity:0.4" disabled>Enviar formulário</button></td>
+            <td>opacidade 40%</td>
+          </tr>
+          <tr>
+            <td>Loading</td>
+            <td><button class="btn-demo" style="background:var(--color-primary-pure)">Enviando…</button></td>
+            <td>indicador de progresso</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:var(--spacing-xxl); display:grid; grid-template-columns:1fr 1fr; gap:var(--spacing-xl)">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-sm)">Acessibilidade visual</h3>
+          <ul class="conform-list">
+            <li><span>Contraste mínimo — texto normal</span><b>4.5:1</b></li>
+            <li><span>Contraste mínimo — texto grande (≥18pt)</span><b>3:1</b></li>
+            <li><span>Foco visível</span><b>≥ 3:1</b></li>
+            <li><span>Não obscurecimento pela Barra Gov.Br</span><span class="badge-ok" style="background:rgba(76,175,80,0.12); color:#2f7a33; border-color:rgba(76,175,80,0.4)">conforme</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-sm)">Elevação e sombras</h3>
+          <div class="elevation-demo" style="grid-template-columns:1fr; gap:var(--spacing-sm)">
+            <div class="elev-card a" style="text-align:left; padding:var(--spacing-md)"><b style="font-size:0.8125rem">elevation-sm</b><p style="font-size:0.75rem; margin-top:2px">Cards e containers</p></div>
+            <div class="elev-card b" style="text-align:left; padding:var(--spacing-md)"><b style="font-size:0.8125rem">elevation-md</b><p style="font-size:0.75rem; margin-top:2px">Cards em hover</p></div>
+            <div class="elev-card c" style="text-align:left; padding:var(--spacing-md)"><b style="font-size:0.8125rem">elevation-lg</b><p style="font-size:0.75rem; margin-top:2px">Modais e overlays</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALIDAÇÃO -->
+  <section id="validacao" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 6</div>
+          <h2>Validação e conformidade</h2>
+        </div>
+      </div>
+
+      <ul class="conform-list" style="margin-bottom:var(--spacing-xxl)">
+        <li><span>Contraste de cores — Ferramenta de Avaliação Gov.br</span><span class="freq">por sprint</span></li>
+        <li><span>Conformidade DSGov — revisão manual + ferramenta</span><span class="freq">por release</span></li>
+        <li><span>Acessibilidade — testes com leitores de tela (NVDA, JAWS)</span><span class="freq">por sprint</span></li>
+        <li><span>LGPD e sigilo — auditoria de dados</span><span class="freq">por release</span></li>
+      </ul>
+
+      <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Justificativa das decisões de design</h3>
+      <div class="principles">
+        <div class="principle"><h3>Identidade institucional</h3><p>Manutenção do Azul IBGE como cor primária, transmitindo credibilidade e autoridade.</p></div>
+        <div class="principle"><h3>Padronização</h3><p>Adoção do sistema 8pt para garantir consistência entre design e desenvolvimento.</p></div>
+        <div class="principle"><h3>Acessibilidade</h3><p>Contraste mínimo e áreas de toque adequadas para baixa visão e uso em campo.</p></div>
+        <div class="principle"><h3>Conformidade legal</h3><p>Alinhamento com a Lei nº 5.534/68 (sigilo estatístico) e com a LGPD.</p></div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xxl); padding:var(--spacing-lg); background:#fff; border:1px solid var(--color-neutral-medium); border-radius:10px;">
+        <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-sm)">Entrega e documentação</h3>
+        <p style="margin-bottom:var(--spacing-sm)">Os tokens foram consolidados para implementação via:</p>
+        <div style="display:flex; gap:var(--spacing-sm); flex-wrap:wrap">
+          <span class="badge-ok" style="background:var(--color-neutral-light); color:var(--color-neutral-dark); border-color:var(--color-neutral-medium)">Web Components · manifesto CEM</span>
+          <span class="badge-ok" style="background:var(--color-neutral-light); color:var(--color-neutral-dark); border-color:var(--color-neutral-medium)">Figma · variáveis de design</span>
+          <span class="badge-ok" style="background:var(--color-neutral-light); color:var(--color-neutral-dark); border-color:var(--color-neutral-medium)">CSS · var(--color-primary-pure)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- REFERÊNCIAS -->
+<footer id="referencias">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#9db4dd">Seção 7</div>
+    <h2>Referências</h2>
+    <ul class="refs" style="margin-top:var(--spacing-lg)">
+      <li>IBGE. <a href="https://www.ibge.gov.br" target="_blank" rel="noopener">Manual de Identidade Visual do IBGE</a>.</li>
+      <li>IBGE. <a href="https://www.ibge.gov.br/np_download/novoportal/documentos_institucionais/politica_de_comunicacao_2ed_2016.pdf" target="_blank" rel="noopener">Política de Comunicação do IBGE (2ª ed., 2016)</a>.</li>
+      <li>BRASIL. <a href="https://www.gov.br/ds/" target="_blank" rel="noopener">DSGov 4.0 — Padrão Digital de Governo</a>.</li>
+      <li>BRASIL. <a href="https://emag.governoeletronico.gov.br/" target="_blank" rel="noopener">e-MAG 3.1 — Modelo de Acessibilidade em Governo Eletrônico</a>.</li>
+      <li>W3C. <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>.</li>
+      <li>BRASIL. <a href="https://www.planalto.gov.br/ccivil_03/leis/l5534.htm" target="_blank" rel="noopener">Lei nº 5.534, de 14/11/1968</a> — sigilo das informações prestadas ao IBGE.</li>
+      <li>BRASIL. <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener">Lei nº 13.709/2018 (LGPD)</a>.</li>
+      <li>IBGE. <a href="https://www.ibge.gov.br/acesso-informacao/sala-de-acesso-a-dados-restritos.html" target="_blank" rel="noopener">Sala de Acesso a Dados Restritos (SAR)</a>.</li>
+      <li><a href="https://github.com/webcomponents/custom-elements-manifest" target="_blank" rel="noopener">Custom Elements Manifest Specification</a>.</li>
+    </ul>
+
+    <div class="foot-meta">
+      <span>Censo Fácil — Mapeamento de Design Tokens · v1.0</span>
+      <span>Agosto 2026 · Validado com DSGov 4.0 e MIV IBGE</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

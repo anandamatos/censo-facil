@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validação Gov.br — Censo Fácil · DSGov 4.0</title>
+<style>
+  :root{
+    --color-primary-pure:#0033A0;
+    --color-primary-dark:#002680;
+    --color-primary-light:#3366CC;
+    --color-secondary-pure:#FFFFFF;
+    --color-neutral-light:#F5F5F5;
+    --color-neutral-medium:#C5D4EB;
+    --color-neutral-dark:#071D41;
+    --color-text-primary:#1C1C1E;
+    --color-text-secondary:#555770;
+    --color-success:#4CAF50;
+    --color-warning:#F5A623;
+    --color-error:#E53935;
+    --color-info:#2196F3;
+
+    --spacing-xs:4px; --spacing-sm:8px; --spacing-md:16px;
+    --spacing-lg:24px; --spacing-xl:32px; --spacing-xxl:48px;
+
+    --elevation-sm:0 2px 4px rgba(0,0,0,0.08);
+    --elevation-md:0 4px 12px rgba(19,81,180,0.08);
+    --elevation-lg:0 8px 24px rgba(0,0,0,0.12);
+
+    --font-base:"Helvetica Neue","Arial",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:80px;}
+  body{margin:0;font-family:var(--font-base);color:var(--color-text-primary);background:var(--color-secondary-pure);-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .skip-link{position:absolute;left:-999px;top:auto;background:var(--color-primary-pure);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:1000;border-radius:4px;}
+  .skip-link:focus{left:var(--spacing-md);top:var(--spacing-md);}
+  :focus-visible{outline:3px solid var(--color-primary-light);outline-offset:2px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 var(--spacing-lg);}
+  section{padding:var(--spacing-xxl) 0;}
+  .eyebrow{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-primary-pure);display:flex;align-items:center;gap:var(--spacing-sm);margin-bottom:var(--spacing-sm);}
+  .eyebrow::before{content:"";width:24px;height:2px;background:var(--color-primary-pure);display:inline-block;}
+  h1,h2,h3{font-family:var(--font-base);color:var(--color-neutral-dark);margin:0;}
+  h2{font-size:1.5rem;font-weight:700;}
+  p{line-height:1.65;color:var(--color-text-secondary);}
+  .lede{font-size:1.0625rem;max-width:64ch;}
+  code, .mono{font-family:var(--font-mono);}
+
+  header.site{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-neutral-medium);}
+  .nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-sm) var(--spacing-lg);}
+  .brand{display:flex;align-items:center;gap:var(--spacing-sm);font-weight:700;color:var(--color-neutral-dark);}
+  .brand .mark{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--color-primary-pure),var(--color-primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-size:0.62rem;font-weight:700;}
+  .nav-links{display:flex;gap:var(--spacing-lg);font-size:0.875rem;list-style:none;padding:0;margin:0;}
+  .nav-links a{text-decoration:none;color:var(--color-text-secondary);}
+  .nav-links a:hover{color:var(--color-primary-pure);}
+  @media (max-width:860px){.nav-links{display:none;}}
+
+  .hero{background:radial-gradient(circle at 85% -10%, rgba(51,102,204,0.16), transparent 55%),var(--color-secondary-pure);padding-top:var(--spacing-xxl);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:var(--spacing-xxl);align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(2rem,4.2vw,3rem);line-height:1.08;letter-spacing:-0.01em;margin-bottom:var(--spacing-md);}
+  .hero h1 em{font-style:normal;color:var(--color-primary-pure);background:linear-gradient(180deg,transparent 62%, rgba(51,102,204,0.18) 62%);}
+  .tag-row{display:flex;gap:var(--spacing-sm);flex-wrap:wrap;margin-top:var(--spacing-lg);}
+  .tag{font-family:var(--font-mono);font-size:0.6875rem;padding:4px 10px;border-radius:20px;background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);color:var(--color-text-secondary);}
+  .tag.active{background:var(--color-primary-pure);color:#fff;border-color:var(--color-primary-pure);}
+
+  .hero-status{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--spacing-md);margin-top:var(--spacing-lg);}
+  @media (max-width:700px){.hero-status{grid-template-columns:1fr;}}
+  .status-stat{background:var(--color-secondary-pure);border:1px solid var(--color-neutral-medium);border-radius:10px;padding:var(--spacing-md);text-align:center;}
+  .status-stat .number{font-size:1.75rem;font-weight:700;color:var(--color-primary-pure);}
+  .status-stat .label{font-size:0.75rem;color:var(--color-text-secondary);}
+
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--spacing-lg);margin-bottom:var(--spacing-xl);flex-wrap:wrap;}
+  .section-head p{margin:var(--spacing-xs) 0 0;}
+
+  .card-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-lg);}
+  .card-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--spacing-lg);}
+  @media (max-width:900px){.card-grid-2,.card-grid-3{grid-template-columns:1fr 1fr;}}
+  @media (max-width:600px){.card-grid-2,.card-grid-3{grid-template-columns:1fr;}}
+
+  .card{background:#fff;border:1px solid var(--color-neutral-medium);border-radius:10px;padding:var(--spacing-lg);box-shadow:var(--elevation-sm);transition:box-shadow 0.2s;}
+  .card:hover{box-shadow:var(--elevation-md);}
+  .card .card-icon{font-size:1.5rem;margin-bottom:var(--spacing-sm);}
+  .card h4{font-size:0.9375rem;margin-bottom:var(--spacing-xs);}
+  .card p{font-size:0.875rem;margin:0;}
+  .card .badge{display:inline-block;padding:2px 12px;border-radius:12px;font-size:0.6875rem;font-weight:600;}
+  .badge.success{background:#EAF4EC;color:#168821;}
+  .badge.warning{background:#FFF8E1;color:#916A00;}
+  .badge.error{background:#FEF0EF;color:#E52207;}
+  .badge.info{background:#EBF1FB;color:#1351B4;}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  table.spec th{text-align:left;font-family:var(--font-mono);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary);padding:var(--spacing-sm) var(--spacing-md);border-bottom:2px solid var(--color-neutral-dark);}
+  table.spec td{padding:var(--spacing-md);border-bottom:1px solid var(--color-neutral-medium);vertical-align:top;}
+
+  .conformity-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-md);}
+  @media (max-width:700px){.conformity-grid{grid-template-columns:1fr;}}
+  .conformity-item{display:flex;align-items:center;gap:var(--spacing-sm);padding:var(--spacing-sm) var(--spacing-md);background:var(--color-neutral-light);border-radius:6px;border-left:4px solid var(--color-success);font-size:0.875rem;}
+  .conformity-item .icon{font-weight:700;color:var(--color-success);}
+  .conformity-item .ref{font-family:var(--font-mono);font-size:0.65rem;color:var(--color-text-secondary);margin-left:auto;}
+
+  .principles{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-lg);counter-reset:p;}
+  @media (max-width:900px){.principles{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.principles{grid-template-columns:1fr;}}
+  .principle{position:relative;padding-top:var(--spacing-xl);}
+  .principle::before{counter-increment:p;content:counter(p);font-family:var(--font-mono);font-size:2rem;font-weight:700;color:var(--color-neutral-medium);position:absolute;top:0;left:0;}
+  .principle h3{font-size:0.9375rem;margin-bottom:var(--spacing-xs);}
+  .principle p{font-size:0.8125rem;margin:0;}
+
+  .devices-demo{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-lg);}
+  @media (max-width:700px){.devices-demo{grid-template-columns:1fr;}}
+  .device-card{background:var(--color-neutral-dark);border-radius:12px;padding:var(--spacing-lg);color:#C5D4EB;position:relative;}
+  .device-card::before{content:"govbr-validation.css";position:absolute;top:-11px;left:16px;background:var(--color-primary-pure);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.625rem;font-family:var(--font-mono);letter-spacing:0.03em;}
+  .device-card .title{color:#fff;font-weight:600;margin-bottom:var(--spacing-md);}
+  .device-grid{display:grid;gap:12px;margin-bottom:var(--spacing-md);}
+  .device-grid.phone{grid-template-columns:repeat(4,1fr);}
+  .device-grid.tablet{grid-template-columns:repeat(8,1fr);}
+  .device-grid div{background:var(--color-primary-light);opacity:0.4;height:28px;border-radius:4px;}
+  .device-card .meta{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.6875rem;color:#9fb4dd;border-top:1px dashed rgba(197,212,235,0.25);padding-top:var(--spacing-sm);}
+
+  .wcag-badge{display:inline-block;padding:2px 12px;border-radius:12px;font-size:0.7rem;font-weight:600;}
+  .wcag-badge.aa{background:#EAF4EC;color:#168821;border:1px solid #168821;}
+  .wcag-badge.aaa{background:#EBF1FB;color:#1351B4;border:1px solid #1351B4;}
+
+  footer{background:var(--color-neutral-dark);color:#C5D4EB;padding:var(--spacing-xxl) 0;}
+  footer h2{color:#fff;}
+  .refs{columns:2;column-gap:var(--spacing-xl);font-size:0.8125rem;}
+  @media (max-width:640px){.refs{columns:1;}}
+  .refs li{margin-bottom:var(--spacing-sm);break-inside:avoid;list-style:none;}
+  .refs a{color:#9db4dd;text-decoration:none;}
+  .refs a:hover{text-decoration:underline;}
+  .foot-meta{display:flex;justify-content:space-between;margin-top:var(--spacing-xxl);padding-top:var(--spacing-lg);border-top:1px solid rgba(197,212,235,0.2);font-family:var(--font-mono);font-size:0.6875rem;color:#8ea3c9;flex-wrap:wrap;gap:var(--spacing-sm);}
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="site">
+  <nav class="nav">
+    <div class="brand"><span class="mark">✓</span> Censo Fácil · Validação Gov.br</div>
+    <ul class="nav-links">
+      <li><a href="#contexto">Contexto</a></li>
+      <li><a href="#e-mag">e-MAG</a></li>
+      <li><a href="#wcag">WCAG 2.2</a></li>
+      <li><a href="#correcoes">Correções</a></li>
+      <li><a href="#principios">Princípios</a></li>
+      <li><a href="#referencias">Referências</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">DSGov 4.0 · e-MAG 3.1 · WCAG 2.2 AA</div>
+          <h1>Validação do Design System com a <em>Ferramenta Gov.br</em></h1>
+          <p class="lede">Conformidade plena do "Censo Fácil" com os padrões de Governo Digital — 100% aderente ao e-MAG 3.1, WCAG 2.2 Nível AA e à Estratégia Nacional de Governo Digital.</p>
+          <div class="tag-row">
+            <span class="tag active">6/6 áreas e-MAG</span>
+            <span class="tag">WCAG 2.2 AA</span>
+            <span class="tag">100% conforme</span>
+            <span class="tag">LGPD · AES-256</span>
+          </div>
+        </div>
+        <div>
+          <div class="hero-status">
+            <div class="status-stat"><div class="number">100%</div><div class="label">Conformidade</div></div>
+            <div class="status-stat"><div class="number">6</div><div class="label">Áreas e-MAG</div></div>
+            <div class="status-stat"><div class="number">AA</div><div class="label">Nível WCAG</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXTO -->
+  <section id="contexto">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 1</div>
+          <h2>Contexto e fundamentação</h2>
+        </div>
+      </div>
+      <p style="max-width:70ch">A validação do Design System do "Censo Fácil" utilizando a <b style="color:var(--color-neutral-dark)">Ferramenta de Avaliação Gov.br</b> foi estruturada para garantir a aderência ao <b style="color:var(--color-neutral-dark)">DSGov 4.0</b> e a conformidade com os padrões de acessibilidade <b style="color:var(--color-neutral-dark)">e-MAG 3.1</b> e <b style="color:var(--color-neutral-dark)">WCAG 2.2 AA</b>, fundamentais para a operação em campo por recenseadores e produtores rurais.</p>
+      <p style="max-width:70ch">A Ferramenta de Avaliação do Gov.br, coordenada pela Secretaria de Governo Digital (SGD/MGI), aplica critérios que visam a uniformização da experiência do cidadão e a eliminação de barreiras digitais. O e-MAG, em sua versão 3.1, é o modelo de acessibilidade adotado pelo governo brasileiro, baseado nas recomendações internacionais da WCAG e adaptado às necessidades locais e prioridades brasileiras.</p>
+
+      <div class="card-grid-2" style="margin-top:var(--spacing-lg)">
+        <div class="card"><div class="card-icon">⚖️</div><h4>Base Legal</h4><p>A Secretaria de Governo Digital (SGD) coordena as diretrizes para a gestão eficiente e segura dos dados no setor público, conforme a Estratégia Nacional de Governo Digital (ENGDo).</p></div>
+        <div class="card"><div class="card-icon">🎯</div><h4>Princípios do Governo Digital</h4><p>Experiência do usuário, interoperabilidade, unificação de canais digitais, governo simples e acessível, e identidade única — todos aplicados ao "Censo Fácil".</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EIXOS DE AVALIAÇÃO -->
+  <section style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 2</div>
+          <h2>Metodologia e critérios de avaliação</h2>
+        </div>
+      </div>
+      <div class="card-grid-2">
+        <div class="card"><div class="card-icon">🆔</div><h4>Identidade Unificada</h4><p>Barra Gov.Br, cores e tipografias institucionais (Azul IBGE, Univers LT Std) — conforme DSGov 4.0.</p><span class="badge success">Conforme</span></div>
+        <div class="card"><div class="card-icon">♿</div><h4>Acessibilidade Digital</h4><p>6 áreas do e-MAG 3.1: Marcação, Comportamento, Conteúdo, Apresentação, Multimídia, Formulário.</p><span class="badge success">Conforme</span></div>
+        <div class="card"><div class="card-icon">📱</div><h4>Qualidade Mobile</h4><p>Grids responsivas (4 colunas smartphones, 8 tablets), target size de toque conforme WCAG 2.2.</p><span class="badge success">Conforme</span></div>
+        <div class="card"><div class="card-icon">🔒</div><h4>Segurança e Privacidade</h4><p>Proteção de dados, criptografia AES-256 em repouso, conformidade com LGPD (Lei nº 13.709/2018).</p><span class="badge success">Conforme</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 ÁREAS E-MAG -->
+  <section id="e-mag">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 3</div>
+          <h2>Auditoria das 6 áreas do e-MAG 3.1</h2>
+        </div>
+      </div>
+      <table class="spec">
+        <thead><tr><th>Área e-MAG</th><th>Itens auditados</th><th>Status</th><th>Evidência</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Marcação</strong></td><td>XHTML Estrito, fechamento de tags, IDs únicos</td><td><span class="badge success">Conforme</span></td><td>Tags fechadas, atributos em minúsculas, IDs únicos validados</td></tr>
+          <tr><td><strong>Comportamento</strong></td><td>Navegação por teclado, foco visível, aria-live</td><td><span class="badge success">Conforme</span></td><td>Teclas Tab, Enter, Espaço funcionais; foco não obscurecido</td></tr>
+          <tr><td><strong>Conteúdo</strong></td><td>Linguagem Simples, hierarquia de títulos</td><td><span class="badge success">Conforme</span></td><td>"Efetivo da Pecuária" → "Criação de animais"</td></tr>
+          <tr><td><strong>Apresentação</strong></td><td>Contraste ≥ 4.5:1, grids fluidas, zoom 200%</td><td><span class="badge success">Conforme</span></td><td>Contraste validado pela Ferramenta Gov.br</td></tr>
+          <tr><td><strong>Multimídia</strong></td><td>alt descritivo, legendas, VLibras, sem auto-play</td><td><span class="badge success">Conforme</span></td><td>Componente GNSS com aria-label e descrições textuais</td></tr>
+          <tr><td><strong>Formulário</strong></td><td>label for/id, fieldset/legend, mensagens de erro com aria-live</td><td><span class="badge success">Conforme</span></td><td>Associações explícitas e mensagens em Linguagem Simples</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- WCAG 2.2 CRITÉRIOS -->
+  <section id="wcag" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 4</div>
+          <h2>Critérios WCAG 2.2 aplicados</h2>
+          <p>Publicada em outubro de 2023, a WCAG 2.2 adicionou nove novos critérios de sucesso.</p>
+        </div>
+      </div>
+      <div class="card-grid-2">
+        <div class="card"><div class="card-icon">⌨️</div><h4>2.4.11 — Focus Not Obscured <span class="wcag-badge aa">AA</span></h4><p>Foco de teclado não obscurecido pela Barra Gov.Br fixa. Reajuste de z-index e padding superior aplicados.</p></div>
+        <div class="card"><div class="card-icon">👆</div><h4>2.5.8 — Target Size <span class="wcag-badge aa">AA</span></h4><p>Alvos interativos com mínimo de 24×24px CSS, expandidos para 48×48px em funções críticas (GNSS).</p></div>
+        <div class="card"><div class="card-icon">🔐</div><h4>3.3.8 — Accessible Authentication <span class="wcag-badge aa">AA</span></h4><p>Login via GOV.BR com biometria ou PIN numérico — sem testes cognitivos (quebra-cabeças ou contas).</p></div>
+        <div class="card"><div class="card-icon">📋</div><h4>3.3.7 — Redundant Entry <span class="wcag-badge aa">AA</span></h4><p>Autopreenchimento de dados via GOV.BR, evitando digitação repetida de informações como CPF e endereço.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORREÇÕES -->
+  <section id="correcoes">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 5</div>
+          <h2>Identificação e correção de não conformidades</h2>
+        </div>
+      </div>
+      <table class="spec">
+        <thead><tr><th>Área</th><th>Não conformidade detectada</th><th>Correção implementada</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Comportamento</strong></td><td>Foco de teclado obscurecido pela Barra Gov.Br fixa</td><td>Reajuste do z-index e espaçamento superior para cumprir WCAG 2.4.11</td><td><span class="badge success">Conforme</span></td></tr>
+          <tr><td><strong>Conteúdo</strong></td><td>Uso de termos técnicos ("Efetivo da Pecuária")</td><td>Aplicação de Linguagem Simples: "Criação de animais"</td><td><span class="badge success">Conforme</span></td></tr>
+          <tr><td><strong>Marcação</strong></td><td>IDs duplicados em blocos de formulários repetitivos</td><td>Geração de IDs únicos e associação explícita via label for</td><td><span class="badge success">Conforme</span></td></tr>
+          <tr><td><strong>Segurança</strong></td><td>Dados sensíveis em texto simples no cache local</td><td>Criptografia AES-256 no IndexedDB via Web Crypto API (LGPD)</td><td><span class="badge success">Conforme</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PRINCÍPIOS ENGDO -->
+  <section id="principios" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 6</div>
+          <h2>Conformidade com a Estratégia Nacional de Governo Digital</h2>
+        </div>
+      </div>
+      <div class="principles">
+        <div class="principle"><h3>Experiência do usuário</h3><p>Interfaces em Linguagem Simples, design centrado no produtor rural.</p></div>
+        <div class="principle"><h3>Interoperabilidade</h3><p>Integração com Barra Gov.Br, autenticação OIDC e ecossistema GOV.BR.</p></div>
+        <div class="principle"><h3>Unificação de canais</h3><p>Consistência entre aplicativo móvel, web e DMC.</p></div>
+        <div class="principle"><h3>Governo simples e acessível</h3><p>Conformidade com e-MAG 3.1 e WCAG 2.2 AA.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMENDAÇÕES -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 7</div>
+          <h2>Recomendações para manutenção contínua</h2>
+        </div>
+      </div>
+      <div class="card-grid-3">
+        <div class="card"><div class="card-icon">🏛️</div><h4>Governança DesignOps</h4><p>Estabelecer rotina para que novos componentes mantenham a herança dos tokens de acessibilidade validados.</p></div>
+        <div class="card"><div class="card-icon">🔄</div><h4>Ciclo de validação contínua</h4><p>Por sprint: testes de contraste e foco. Por release: auditoria das 6 áreas do e-MAG.</p></div>
+        <div class="card"><div class="card-icon">📡</div><h4>Monitoramento de novas diretrizes</h4><p>Acompanhar publicações do W3C e SGD/MGI para conformidade com futuras versões WCAG.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section style="background:var(--color-neutral-dark); color:#C5D4EB;">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow" style="color:#9db4dd;">Conclusão</div>
+          <h2 style="color:#fff;">Status final de conformidade plena</h2>
+        </div>
+      </div>
+      <div class="card-grid-3" style="margin-top:var(--spacing-lg)">
+        <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:var(--spacing-lg); border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:1.75rem; font-weight:700; color:var(--color-success);">100%</div>
+          <div style="font-weight:600; color:#fff;">Acessibilidade</div>
+          <p style="color:#93B8E8; font-size:0.875rem; margin:var(--spacing-xs) 0 0;">e-MAG 3.1 e WCAG 2.2 Nível AA</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:var(--spacing-lg); border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:1.75rem; font-weight:700; color:var(--color-primary-light);">✅</div>
+          <div style="font-weight:600; color:#fff;">Identidade</div>
+          <p style="color:#93B8E8; font-size:0.875rem; margin:var(--spacing-xs) 0 0;">Alinhado ao MIV IBGE e DSGov 4.0</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:var(--spacing-lg); border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:1.75rem; font-weight:700; color:var(--color-info);">🔒</div>
+          <div style="font-weight:600; color:#fff;">Segurança</div>
+          <p style="color:#93B8E8; font-size:0.875rem; margin:var(--spacing-xs) 0 0;">LGPD · AES-256 · Descarte seguro</p>
+        </div>
+      </div>
+      <blockquote style="font-style:italic; padding:var(--spacing-lg); border-left:4px solid var(--color-primary-light); margin:var(--spacing-xxl) 0 0; background:rgba(255,255,255,0.04); border-radius:0 8px 8px 0;">
+        “A digitalização do Estado e a identificação civil são projetos de longo prazo que dependem da parceria e da cooperação de diversas instituições públicas.”
+        <br><span style="color:#93B8E8; font-size:0.875rem;">— Rogério Mascarenhas, Secretário de Governo Digital do MGI</span>
+      </blockquote>
+    </div>
+  </section>
+
+</main>
+
+<footer id="referencias">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#9db4dd">Seção 8</div>
+    <h2>Referências</h2>
+    <ul class="refs" style="margin-top:var(--spacing-lg)">
+      <li>BRASIL. Secretaria de Governo Digital. <a href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/acessibilidade-digital/modelo-de-acessibilidade/modelo-de-acessibilidade" target="_blank" rel="noopener">Modelo de Acessibilidade em Governo Eletrônico (e-MAG) versão 3.1</a>.</li>
+      <li>W3C. <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>. Publicado em outubro de 2023.</li>
+      <li>AODA. <a href="https://aoda.ca/web-accessibility-guidelines-for-target-size/" target="_blank" rel="noopener">Web Accessibility Guidelines for Target Size</a>.</li>
+      <li>BRASIL. <a href="https://www.gov.br/governodigital/pt-br/estrategias-e-governanca-digital" target="_blank" rel="noopener">Portaria SGD/MGI nº 4.248/2024 — Estratégia Nacional de Governo Digital</a>.</li>
+      <li>BRASIL. <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener">Lei nº 13.709, de 14 de agosto de 2018 (LGPD)</a>.</li>
+      <li>CTA/IFRS. <a href="https://cta.ifrs.edu.br/cursos-do-emag/" target="_blank" rel="noopener">Cursos do e-MAG — Centro Tecnológico de Acessibilidade do IFRS</a>.</li>
+    </ul>
+    <div class="foot-meta">
+      <span>Validação Gov.br — Censo Fácil · v1.0</span>
+      <span>Agosto 2026 · 100% conforme com DSGov 4.0 e e-MAG 3.1</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

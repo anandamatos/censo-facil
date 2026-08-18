@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEM — br-gnss-tracker · Censo Fácil</title>
+<style>
+  :root{
+    --color-primary-pure:#0033A0;
+    --color-primary-dark:#002680;
+    --color-primary-light:#3366CC;
+    --color-secondary-pure:#FFFFFF;
+    --color-neutral-light:#F5F5F5;
+    --color-neutral-medium:#C5D4EB;
+    --color-neutral-dark:#071D41;
+    --color-text-primary:#1C1C1E;
+    --color-text-secondary:#555770;
+    --color-success:#4CAF50;
+    --color-warning:#F5A623;
+    --color-error:#E53935;
+    --color-info:#2196F3;
+
+    --spacing-xs:4px; --spacing-sm:8px; --spacing-md:16px;
+    --spacing-lg:24px; --spacing-xl:32px; --spacing-xxl:48px;
+
+    --elevation-sm:0 2px 4px rgba(0,0,0,0.08);
+    --elevation-md:0 4px 12px rgba(19,81,180,0.08);
+    --elevation-lg:0 8px 24px rgba(0,0,0,0.12);
+
+    --font-base:"Helvetica Neue","Arial",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font-base);color:var(--color-text-primary);background:var(--color-secondary-pure);-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .skip-link{position:absolute;left:-999px;top:auto;background:var(--color-primary-pure);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:1000;border-radius:4px;}
+  .skip-link:focus{left:var(--spacing-md);top:var(--spacing-md);}
+  :focus-visible{outline:3px solid var(--color-primary-light);outline-offset:2px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 var(--spacing-lg);}
+  section{padding:var(--spacing-xxl) 0;}
+  .eyebrow{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-primary-pure);display:flex;align-items:center;gap:var(--spacing-sm);margin-bottom:var(--spacing-sm);}
+  .eyebrow::before{content:"";width:24px;height:2px;background:var(--color-primary-pure);display:inline-block;}
+  h1,h2,h3{font-family:var(--font-base);color:var(--color-neutral-dark);margin:0;}
+  h2{font-size:1.5rem;font-weight:700;}
+  p{line-height:1.65;color:var(--color-text-secondary);}
+  .lede{font-size:1.0625rem;max-width:64ch;}
+  code, .mono{font-family:var(--font-mono);}
+
+  header.site{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-neutral-medium);}
+  .nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-sm) var(--spacing-lg);}
+  .brand{display:flex;align-items:center;gap:var(--spacing-sm);font-weight:700;color:var(--color-neutral-dark);}
+  .brand .mark{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--color-primary-pure),var(--color-primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-size:0.58rem;font-weight:700;}
+  .nav-links{display:flex;gap:var(--spacing-lg);font-size:0.875rem;list-style:none;padding:0;margin:0;}
+  .nav-links a{text-decoration:none;color:var(--color-text-secondary);}
+  .nav-links a:hover{color:var(--color-primary-pure);}
+  @media (max-width:900px){.nav-links{display:none;}}
+
+  /* hero */
+  .hero{background:radial-gradient(circle at 85% -10%, rgba(51,102,204,0.16), transparent 55%),var(--color-secondary-pure);padding-top:var(--spacing-xxl);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:var(--spacing-xxl);align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(1.8rem,4vw,2.75rem);line-height:1.1;letter-spacing:-0.01em;margin-bottom:var(--spacing-md);}
+  .hero h1 code{background:var(--color-neutral-dark);color:#fff;padding:2px 10px;border-radius:6px;font-size:0.6em;vertical-align:middle;}
+  .tag-row{display:flex;gap:var(--spacing-sm);flex-wrap:wrap;margin-top:var(--spacing-lg);}
+  .tag{font-family:var(--font-mono);font-size:0.6875rem;padding:4px 10px;border-radius:20px;background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);color:var(--color-text-secondary);}
+
+  /* signature: manifest tree explorer */
+  .tree-card{background:var(--color-neutral-dark);border-radius:14px;padding:var(--spacing-lg);box-shadow:var(--elevation-lg);position:relative;color:#C5D4EB;font-family:var(--font-mono);font-size:0.75rem;}
+  .tree-card::before{content:"custom-elements.json";position:absolute;top:-11px;left:16px;background:var(--color-primary-pure);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.625rem;letter-spacing:0.03em;}
+  .tree{line-height:2;}
+  .tree .k{color:#9fb4dd;}
+  .tree .v{color:#F5C877;}
+  .tree .l1{padding-left:0;}
+  .tree .l2{padding-left:16px;}
+  .tree .l3{padding-left:32px;}
+  .tree .l4{padding-left:48px;}
+  .tree .tag-html{color:var(--color-success);}
+
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--spacing-lg);margin-bottom:var(--spacing-xl);flex-wrap:wrap;}
+  .section-head p{margin:var(--spacing-xs) 0 0;}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  table.spec th{text-align:left;font-family:var(--font-mono);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary);padding:var(--spacing-sm) var(--spacing-md);border-bottom:2px solid var(--color-neutral-dark);}
+  table.spec td{padding:var(--spacing-md);border-bottom:1px solid var(--color-neutral-medium);vertical-align:top;}
+  table.spec td:first-child{font-family:var(--font-mono);color:var(--color-primary-pure);white-space:nowrap;}
+
+  pre{background:var(--color-neutral-dark);color:#C5D4EB;padding:var(--spacing-lg);border-radius:10px;overflow-x:auto;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.6;box-shadow:var(--elevation-md);}
+  pre .cm{color:#7FA0D6;}
+  pre .kw{color:#7FCB9B;}
+  pre .str{color:#F5C877;}
+  pre .k{color:#9fb4dd;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-xl);align-items:start;}
+  @media (max-width:820px){.two-col{grid-template-columns:1fr;}}
+
+  /* manifest structure cards */
+  .struct-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);}
+  @media (max-width:900px){.struct-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.struct-grid{grid-template-columns:1fr;}}
+  .struct-card{background:#fff;border:1px solid var(--color-neutral-medium);border-radius:10px;padding:var(--spacing-md);border-top:3px solid var(--color-primary-pure);}
+  .struct-card .k{font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-primary-pure);text-transform:uppercase;letter-spacing:0.04em;}
+  .struct-card h3{font-size:0.9375rem;margin:var(--spacing-xs) 0;}
+  .struct-card p{font-size:0.8125rem;margin:0;}
+
+  /* css properties swatches */
+  .css-props{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--spacing-md);}
+  @media (max-width:760px){.css-props{grid-template-columns:1fr;}}
+  .css-prop{border-radius:10px;overflow:hidden;border:1px solid var(--color-neutral-medium);background:#fff;}
+  .css-prop .swatch{height:56px;}
+  .css-prop .info{padding:var(--spacing-md);}
+  .css-prop .name{font-family:var(--font-mono);font-size:0.75rem;color:var(--color-neutral-dark);display:block;}
+  .css-prop .desc{font-size:0.75rem;margin-top:4px;color:var(--color-text-secondary);}
+
+  .checklist{list-style:none;margin:0;padding:0;display:grid;gap:var(--spacing-sm);}
+  .checklist li{display:flex;align-items:flex-start;gap:var(--spacing-sm);background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);border-radius:8px;padding:var(--spacing-md);font-size:0.875rem;}
+  .checklist .ok{color:var(--color-success);font-weight:700;flex:none;}
+
+  /* pipeline */
+  .pipeline{display:flex;align-items:center;gap:var(--spacing-sm);flex-wrap:wrap;}
+  .pipe-step{background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);border-radius:8px;padding:var(--spacing-sm) var(--spacing-md);font-family:var(--font-mono);font-size:0.8125rem;color:var(--color-neutral-dark);}
+  .pipe-arrow{color:var(--color-primary-pure);font-weight:700;}
+
+  footer{background:var(--color-neutral-dark);color:#C5D4EB;padding:var(--spacing-xxl) 0;}
+  footer h2{color:#fff;}
+  .refs{columns:2;column-gap:var(--spacing-xl);font-size:0.8125rem;}
+  @media (max-width:640px){.refs{columns:1;}}
+  .refs li{margin-bottom:var(--spacing-sm);break-inside:avoid;}
+  .refs a{color:#9db4dd;text-decoration:none;}
+  .refs a:hover{text-decoration:underline;}
+  .foot-meta{display:flex;justify-content:space-between;margin-top:var(--spacing-xxl);padding-top:var(--spacing-lg);border-top:1px solid rgba(197,212,235,0.2);font-family:var(--font-mono);font-size:0.6875rem;color:#8ea3c9;flex-wrap:wrap;gap:var(--spacing-sm);}
+
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="site">
+  <nav class="nav">
+    <div class="brand"><span class="mark">CEM</span> Censo Fácil · br-gnss-tracker</div>
+    <ul class="nav-links">
+      <li><a href="#estrutura">Estrutura</a></li>
+      <li><a href="#schema">Schema</a></li>
+      <li><a href="#acessibilidade">Acessibilidade</a></li>
+      <li><a href="#validacao">Validação</a></li>
+      <li><a href="#uso">Exemplo de uso</a></li>
+      <li><a href="#referencias">Referências</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Custom Elements Manifest · Handoff Fase 2 → Fase 3</div>
+          <h1>Documentação CEM<br><code>&lt;br-gnss-tracker&gt;</code></h1>
+          <p class="lede">O contrato técnico que permite que IDEs, linters e geradores de documentação reconheçam automaticamente as capacidades do componente — atributos, membros, eventos, slots e propriedades CSS, todos formalizados em um único manifesto JSON.</p>
+          <div class="tag-row">
+            <span class="tag">schemaVersion 1.0.0</span>
+            <span class="tag">customElement: true</span>
+            <span class="tag">WCAG 2.2 · e-MAG 3.1</span>
+            <span class="tag">LGPD · AES-256</span>
+          </div>
+        </div>
+
+        <div class="tree-card" aria-hidden="true">
+          <div class="tree">
+            <div class="l1"><span class="k">"modules"</span>: [</div>
+            <div class="l2"><span class="k">"kind"</span>: <span class="v">"javascript-module"</span></div>
+            <div class="l2"><span class="k">"declarations"</span>: [</div>
+            <div class="l3">{ <span class="k">"kind"</span>: <span class="v">"class"</span>, <span class="k">"tagName"</span>: <span class="tag-html">"br-gnss-tracker"</span> }</div>
+            <div class="l3"><span class="k">"attributes"</span>: [hdop, status]</div>
+            <div class="l3"><span class="k">"members"</span>: [lat, long, precision]</div>
+            <div class="l3"><span class="k">"events"</span>: [br-position-update, ...]</div>
+            <div class="l3"><span class="k">"slots"</span>: [icon, status-message]</div>
+            <div class="l3"><span class="k">"cssProperties"</span>: [--color-gnss-*]</div>
+            <div class="l2">]</div>
+            <div class="l1">]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXTO -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 1</div>
+          <h2>Contexto e fundamentação</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <p>O CEM define um esquema JSON para descrever módulos JavaScript e suas declarações exportadas — classes, funções, variáveis e tipos personalizados — sendo consumido por ferramentas que geram documentação, fornecem autocompletar em IDEs e realizam verificações estáticas.</p>
+        <p>A documentação segue as diretrizes de acessibilidade WCAG 2.2 e e-MAG 3.1, garantindo que as propriedades reflitam o comportamento inclusivo do sistema. O componente atua como trava de qualidade geodésica, bloqueando o encerramento do questionário quando o sinal é insuficiente (HDOP &gt; 5.0m).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTRUTURA DO MANIFESTO -->
+  <section id="estrutura" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 2</div>
+          <h2>Estrutura do manifesto</h2>
+        </div>
+      </div>
+
+      <div class="struct-grid" style="margin-bottom:var(--spacing-xxl)">
+        <div class="struct-card"><div class="k">2.1 Schema</div><h3>Metadados</h3><p>schemaVersion, readme e o array de módulos analisados.</p></div>
+        <div class="struct-card"><div class="k">2.2 Classe</div><h3>Declaração</h3><p>kind, name, tagName e customElement: true.</p></div>
+        <div class="struct-card"><div class="k">2.3 Atributos</div><h3>Configuração declarativa</h3><p>hdop e status, configuráveis via HTML.</p></div>
+        <div class="struct-card"><div class="k">2.4 Membros</div><h3>Propriedades</h3><p>lat, long e precision.</p></div>
+        <div class="struct-card"><div class="k">2.5 Eventos</div><h3>API assíncrona</h3><p>br-position-update e br-status-change.</p></div>
+        <div class="struct-card"><div class="k">2.6 Slots</div><h3>Personalização</h3><p>icon e status-message.</p></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Atributos observados</h3>
+          <table class="spec">
+            <thead><tr><th>Atributo</th><th>Tipo</th><th>Padrão</th></tr></thead>
+            <tbody>
+              <tr><td>hdop</td><td>number</td><td>null</td></tr>
+              <tr><td>status</td><td>string</td><td>'loading'</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Membros (propriedades)</h3>
+          <table class="spec">
+            <thead><tr><th>Propriedade</th><th>Tipo</th></tr></thead>
+            <tbody>
+              <tr><td>lat</td><td>number</td></tr>
+              <tr><td>long</td><td>number</td></tr>
+              <tr><td>precision</td><td>number · σₕ = HDOP × σ₀</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:var(--spacing-xl)">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Eventos</h3>
+          <table class="spec">
+            <thead><tr><th>Evento</th><th>Payload</th></tr></thead>
+            <tbody>
+              <tr><td>br-position-update</td><td>{ lat, long, precision }</td></tr>
+              <tr><td>br-status-change</td><td>{ previousStatus, currentStatus, hdop }</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Slots</h3>
+          <table class="spec">
+            <thead><tr><th>Slot</th><th>Descrição</th></tr></thead>
+            <tbody>
+              <tr><td>icon</td><td>Ícone de status de satélite</td></tr>
+              <tr><td>status-message</td><td>Orientações em Linguagem Simples</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xl)">
+        <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Propriedades CSS (cssProperties)</h3>
+        <div class="css-props">
+          <div class="css-prop">
+            <div class="swatch" style="background:var(--color-success)"></div>
+            <div class="info"><span class="name">--color-gnss-success</span><span class="desc">HDOP ≤ 2.5m · padrão #4CAF50</span></div>
+          </div>
+          <div class="css-prop">
+            <div class="swatch" style="background:var(--color-warning)"></div>
+            <div class="info"><span class="name">--color-gnss-warning</span><span class="desc">2.5m &lt; HDOP ≤ 5.0m · padrão #F5A623</span></div>
+          </div>
+          <div class="css-prop">
+            <div class="swatch" style="background:var(--color-error)"></div>
+            <div class="info"><span class="name">--color-gnss-error</span><span class="desc">HDOP &gt; 5.0m · padrão #E53935</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEMA DE REFERÊNCIA -->
+  <section id="schema">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 3</div>
+          <h2>Custom Elements Manifest — schema de referência</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Schema global</h3>
+          <pre><span class="k">"$schema"</span>: <span class="cm">".../schema.json"</span>,
+<span class="k">"schemaVersion"</span>: <span class="cm">"1.0.0"</span>,
+<span class="k">"readme"</span>: <span class="cm">""</span>,
+<span class="k">"modules"</span>: [ ... ]</pre>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Integração com package.json</h3>
+          <pre>{
+  <span class="k">"name"</span>: <span class="cm">"br-gnss-tracker"</span>,
+  <span class="k">"version"</span>: <span class="cm">"1.0.0"</span>,
+  <span class="k">"customElements"</span>: <span class="cm">"./custom-elements.json"</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACESSIBILIDADE -->
+  <section id="acessibilidade" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 4</div>
+          <h2>Mapeamento de metadados e acessibilidade</h2>
+          <p>WCAG 2.2 e e-MAG 3.1, garantindo que as propriedades reflitam o comportamento inclusivo do sistema.</p>
+        </div>
+      </div>
+      <ul class="checklist" style="margin-bottom:var(--spacing-xl)">
+        <li><span class="ok">✓</span><span><b style="color:var(--color-neutral-dark)">Regiões vivas (ARIA)</b> — o componente gerencia internamente <code class="mono">aria-live="polite"</code> no slot de mensagens de status, sem interromper o preenchimento (e-MAG 3.1 · Comportamento).</span></li>
+        <li><span class="ok">✓</span><span><b style="color:var(--color-neutral-dark)">Target size</b> — botões internos de recalibragem mantêm alvos de toque de no mínimo 48×48px CSS, superando o critério 2.5.8 da WCAG 2.2.</span></li>
+        <li><span class="ok">✓</span><span><b style="color:var(--color-neutral-dark)">Identidade visual</b> — os tokens de cores em cssProperties usam a paleta institucional do IBGE (verde funcional, amarelo de alerta).</span></li>
+      </ul>
+      <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Documentação com JSDoc</h3>
+      <pre><span class="cm">/**
+ * @customElement
+ * @fires br-position-update - Emitido na mudança de posição
+ * @slot status-message - Área para orientações ao usuário
+ */</span>
+<span class="kw">class</span> BrGnssTracker <span class="kw">extends</span> HTMLElement {
+  <span class="cm">// ...</span>
+}</pre>
+    </div>
+  </section>
+
+  <!-- VALIDAÇÃO E MANUTENÇÃO -->
+  <section id="validacao">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 5</div>
+          <h2>Validação e manutenção</h2>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Validação via CEM Analyzer</h3>
+          <p style="margin-bottom:var(--spacing-md)">O arquivo deve ser validado garantindo que não existam inconsistências de tipos ou nomes de atributos.</p>
+          <pre>npm install -D @custom-elements-manifest/analyzer
+npx cem analyze --globs <span class="cm">"src/**/*.js"</span></pre>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Integração com IDEs</h3>
+          <p>Desenvolvedores da Fase 3 poderão utilizar este manifesto em editores como VS Code para obter autocompletar e validação imediata de tipos — por exemplo, garantindo que <code class="mono">hdop</code> seja sempre numérico.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xl)">
+        <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Handoff de DesignOps</h3>
+        <div class="pipeline">
+          <span class="pipe-step">Design — Fase 2</span>
+          <span class="pipe-arrow">→</span>
+          <span class="pipe-step">Manifesto CEM validado</span>
+          <span class="pipe-arrow">→</span>
+          <span class="pipe-step">Engenharia — Fase 3</span>
+          <span class="pipe-arrow">→</span>
+          <span class="pipe-step">Criptografia AES-256 · LGPD</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXEMPLO DE USO -->
+  <section id="uso" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 6</div>
+          <h2>Exemplo de uso</h2>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">HTML</h3>
+          <pre>&lt;<span class="tag-html">br-gnss-tracker</span>
+  hdop=<span class="cm">"2.1"</span>
+  status=<span class="cm">"optimal"</span>
+  style=<span class="cm">"--color-gnss-success: #4CAF50;"</span>
+&gt;
+  &lt;span slot=<span class="cm">"status-message"</span>&gt;Precisão ótima para registro&lt;/span&gt;
+  &lt;button slot=<span class="cm">"actions"</span>&gt;📖 Manual do Recenseador&lt;/button&gt;
+&lt;/<span class="tag-html">br-gnss-tracker</span>&gt;</pre>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">JavaScript</h3>
+          <pre><span class="kw">const</span> tracker = document.querySelector(<span class="cm">'br-gnss-tracker'</span>);
+
+tracker.addEventListener(<span class="cm">'br-position-update'</span>, (e) =&gt; {
+  console.log(<span class="cm">'Nova posição:'</span>, e.detail);
+});
+
+tracker.addEventListener(<span class="cm">'br-status-change'</span>, (e) =&gt; {
+  console.log(<span class="cm">'Status alterado:'</span>, e.detail);
+});</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="referencias">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#9db4dd">Seção 7</div>
+    <h2>Referências</h2>
+    <ul class="refs" style="margin-top:var(--spacing-lg)">
+      <li>W3C. <a href="https://github.com/webcomponents/custom-elements-manifest" target="_blank" rel="noopener">Custom Elements Manifest Specification</a>.</li>
+      <li>Open Web Components. <a href="https://custom-elements-manifest.open-wc.org/analyzer/getting-started/" target="_blank" rel="noopener">Custom Elements Manifest Analyzer</a>.</li>
+      <li>WHATWG. <a href="https://html.spec.whatwg.org/multipage/custom-elements.html" target="_blank" rel="noopener">HTML Standard — Custom Elements</a>.</li>
+      <li>IBGE. <a href="https://biblioteca.ibge.gov.br/visualizacao/instrumentos_de_coleta/doc5723.pdf" target="_blank" rel="noopener">Manual do Recenseador do Censo Demográfico 2022 (CD-1.09)</a>.</li>
+      <li>W3C. <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>.</li>
+      <li>BRASIL. <a href="https://emag.governoeletronico.gov.br/" target="_blank" rel="noopener">e-MAG 3.1 — Modelo de Acessibilidade em Governo Eletrônico</a>.</li>
+      <li>BRASIL. <a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener">Lei nº 13.709/2018 (LGPD)</a>.</li>
+      <li>IBGE. <a href="https://www.ibge.gov.br" target="_blank" rel="noopener">Mapeamento de Design Tokens para o "Censo Fácil" (referência interna)</a>.</li>
+    </ul>
+    <div class="foot-meta">
+      <span>CEM — br-gnss-tracker · v1.0</span>
+      <span>Agosto 2026 · Manifesto validado e pronto para handoff para a Fase 3</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grids Móveis — Censo Fácil</title>
+<style>
+  :root{
+    --color-primary-pure:#0033A0;
+    --color-primary-dark:#002680;
+    --color-primary-light:#3366CC;
+    --color-secondary-pure:#FFFFFF;
+    --color-neutral-light:#F5F5F5;
+    --color-neutral-medium:#C5D4EB;
+    --color-neutral-dark:#071D41;
+    --color-text-primary:#1C1C1E;
+    --color-text-secondary:#555770;
+    --color-success:#4CAF50;
+    --color-warning:#F5A623;
+    --color-error:#E53935;
+    --color-info:#2196F3;
+
+    --spacing-xs:4px; --spacing-sm:8px; --spacing-md:16px;
+    --spacing-lg:24px; --spacing-xl:32px; --spacing-xxl:48px;
+
+    --elevation-sm:0 2px 4px rgba(0,0,0,0.08);
+    --elevation-md:0 4px 12px rgba(19,81,180,0.08);
+    --elevation-lg:0 8px 24px rgba(0,0,0,0.12);
+
+    --font-base:"Helvetica Neue","Arial",sans-serif;
+    --font-mono:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font-base);color:var(--color-text-primary);background:var(--color-secondary-pure);-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .skip-link{position:absolute;left:-999px;top:auto;background:var(--color-primary-pure);color:#fff;padding:var(--spacing-sm) var(--spacing-md);z-index:1000;border-radius:4px;}
+  .skip-link:focus{left:var(--spacing-md);top:var(--spacing-md);}
+  :focus-visible{outline:3px solid var(--color-primary-light);outline-offset:2px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 var(--spacing-lg);}
+  section{padding:var(--spacing-xxl) 0;}
+  .eyebrow{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-primary-pure);display:flex;align-items:center;gap:var(--spacing-sm);margin-bottom:var(--spacing-sm);}
+  .eyebrow::before{content:"";width:24px;height:2px;background:var(--color-primary-pure);display:inline-block;}
+  h1,h2,h3{font-family:var(--font-base);color:var(--color-neutral-dark);margin:0;}
+  h2{font-size:1.5rem;font-weight:700;}
+  p{line-height:1.65;color:var(--color-text-secondary);}
+  .lede{font-size:1.0625rem;max-width:64ch;}
+  code, .mono{font-family:var(--font-mono);}
+
+  header.site{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-neutral-medium);}
+  .nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-sm) var(--spacing-lg);}
+  .brand{display:flex;align-items:center;gap:var(--spacing-sm);font-weight:700;color:var(--color-neutral-dark);}
+  .brand .mark{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--color-primary-pure),var(--color-primary-light));display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-size:0.62rem;font-weight:700;}
+  .nav-links{display:flex;gap:var(--spacing-lg);font-size:0.875rem;list-style:none;padding:0;margin:0;}
+  .nav-links a{text-decoration:none;color:var(--color-text-secondary);}
+  .nav-links a:hover{color:var(--color-primary-pure);}
+  @media (max-width:860px){.nav-links{display:none;}}
+
+  /* hero */
+  .hero{background:radial-gradient(circle at 85% -10%, rgba(51,102,204,0.16), transparent 55%),var(--color-secondary-pure);padding-top:var(--spacing-xxl);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:var(--spacing-xxl);align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{font-size:clamp(2rem,4.2vw,3rem);line-height:1.08;letter-spacing:-0.01em;margin-bottom:var(--spacing-md);}
+  .hero h1 em{font-style:normal;color:var(--color-primary-pure);background:linear-gradient(180deg,transparent 62%, rgba(51,102,204,0.18) 62%);}
+  .tag-row{display:flex;gap:var(--spacing-sm);flex-wrap:wrap;margin-top:var(--spacing-lg);}
+  .tag{font-family:var(--font-mono);font-size:0.6875rem;padding:4px 10px;border-radius:20px;background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);color:var(--color-text-secondary);}
+
+  /* Signature: live phone/tablet grid comparator */
+  .device-shell{background:var(--color-neutral-dark);border-radius:14px;padding:var(--spacing-lg);box-shadow:var(--elevation-lg);position:relative;color:#C5D4EB;}
+  .device-shell::before{content:"grid-preview.css";position:absolute;top:-11px;left:16px;background:var(--color-primary-pure);color:#fff;padding:2px 10px;border-radius:4px;font-size:0.625rem;font-family:var(--font-mono);letter-spacing:0.03em;}
+  .device-toggle{display:flex;gap:var(--spacing-sm);font-family:var(--font-mono);font-size:0.6875rem;margin-bottom:var(--spacing-md);}
+  .device-toggle span{padding:4px 10px;border-radius:20px;border:1px solid rgba(197,212,235,0.3);}
+  .device-toggle span.active{background:var(--color-primary-pure);border-color:var(--color-primary-pure);color:#fff;}
+  .preview-frame{background:#0a1f4d;border-radius:10px;padding:var(--spacing-md);}
+  .preview-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .preview-cols div{background:var(--color-primary-light);opacity:0.55;height:34px;border-radius:4px;}
+  .preview-meta{margin-top:var(--spacing-md);display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.6875rem;color:#9fb4dd;border-top:1px dashed rgba(197,212,235,0.25);padding-top:var(--spacing-sm);}
+
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--spacing-lg);margin-bottom:var(--spacing-xl);flex-wrap:wrap;}
+  .section-head p{margin:var(--spacing-xs) 0 0;}
+
+  /* device comparison cards */
+  .device-compare{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-xl);}
+  @media (max-width:820px){.device-compare{grid-template-columns:1fr;}}
+  .device-card{background:#fff;border:1px solid var(--color-neutral-medium);border-radius:12px;padding:var(--spacing-lg);box-shadow:var(--elevation-sm);}
+  .device-card .persona{font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-primary-pure);text-transform:uppercase;letter-spacing:0.04em;}
+  .device-card h3{font-size:1.0625rem;margin:var(--spacing-xs) 0 var(--spacing-md);}
+  .device-demo{background:var(--color-neutral-light);border-radius:8px;padding:var(--spacing-md);margin-bottom:var(--spacing-md);}
+  .device-demo .cols{display:grid;gap:12px;}
+  .device-demo.phone .cols{grid-template-columns:repeat(4,1fr);}
+  .device-demo.tablet .cols{grid-template-columns:repeat(8,1fr);}
+  .device-demo .cols div{background:var(--color-primary-pure);opacity:0.3;height:32px;border-radius:4px;}
+  .device-card table{width:100%;border-collapse:collapse;font-size:0.8125rem;}
+  .device-card td{padding:6px 0;border-bottom:1px solid var(--color-neutral-medium);}
+  .device-card td:first-child{color:var(--color-text-secondary);}
+  .device-card td:last-child{text-align:right;font-family:var(--font-mono);color:var(--color-neutral-dark);font-weight:700;}
+
+  /* breakpoints ruler */
+  .ruler{position:relative;margin-top:var(--spacing-xxl);}
+  .ruler-track{display:flex;height:56px;border-radius:10px;overflow:hidden;}
+  .ruler-seg{display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.75rem;color:#fff;}
+  .ruler-seg.mobile{flex:2;background:var(--color-primary-light);}
+  .ruler-seg.tablet{flex:3;background:var(--color-primary-pure);}
+  .ruler-seg.desktop{flex:4;background:var(--color-primary-dark);}
+  .ruler-labels{display:flex;justify-content:space-between;margin-top:var(--spacing-sm);font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-text-secondary);}
+
+  /* spacing scale */
+  .spacing-demo{display:flex;align-items:flex-end;gap:var(--spacing-md);flex-wrap:wrap;}
+  .spacing-bar-wrap{text-align:center;}
+  .spacing-bar{background:var(--color-primary-pure);border-radius:3px 3px 0 0;width:32px;}
+  .spacing-bar-wrap .lbl{font-family:var(--font-mono);font-size:0.6875rem;margin-top:var(--spacing-xs);color:var(--color-text-secondary);}
+
+  /* mobile-first progression */
+  .progression{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--spacing-lg);position:relative;}
+  @media (max-width:820px){.progression{grid-template-columns:1fr;}}
+  .progression::before{content:"";position:absolute;top:28px;left:8%;right:8%;height:2px;background:var(--color-neutral-medium);z-index:0;}
+  @media (max-width:820px){.progression::before{display:none;}}
+  .prog-step{background:#fff;border:1px solid var(--color-neutral-medium);border-radius:10px;padding:var(--spacing-lg);position:relative;z-index:1;}
+  .prog-step .dot{width:14px;height:14px;border-radius:50%;background:var(--color-primary-pure);margin-bottom:var(--spacing-sm);}
+  .prog-step h3{font-size:0.9375rem;margin-bottom:var(--spacing-xs);}
+  .prog-step .grid-tag{font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-primary-pure);display:block;margin-top:var(--spacing-sm);}
+
+  /* target size */
+  .targets{display:flex;gap:var(--spacing-xl);align-items:center;flex-wrap:wrap;}
+  .target-demo{display:flex;flex-direction:column;align-items:center;gap:var(--spacing-sm);}
+  .target-box{background:var(--color-primary-pure);border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.6875rem;}
+  .target-box.std{width:24px;height:24px;font-size:0;}
+  .target-box.crit{width:48px;height:48px;}
+  .target-box.spaced{width:16px;height:16px;font-size:0;}
+  .target-demo .cap{font-size:0.75rem;color:var(--color-text-secondary);text-align:center;max-width:140px;}
+  .spaced-pair{display:flex;gap:8px;}
+
+  /* checklist / benefits */
+  .benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--spacing-md);counter-reset:b;}
+  @media (max-width:900px){.benefits{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.benefits{grid-template-columns:1fr;}}
+  .benefit{position:relative;padding-top:var(--spacing-xl);}
+  .benefit::before{counter-increment:b;content:counter(b);font-family:var(--font-mono);font-size:2rem;font-weight:700;color:var(--color-neutral-medium);position:absolute;top:0;left:0;}
+  .benefit h3{font-size:0.9375rem;margin-bottom:var(--spacing-xs);}
+  .benefit p{font-size:0.8125rem;margin:0;}
+
+  table.spec{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  table.spec th{text-align:left;font-family:var(--font-mono);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary);padding:var(--spacing-sm) var(--spacing-md);border-bottom:2px solid var(--color-neutral-dark);}
+  table.spec td{padding:var(--spacing-md);border-bottom:1px solid var(--color-neutral-medium);vertical-align:top;}
+
+  .checklist{list-style:none;margin:0;padding:0;display:grid;gap:var(--spacing-sm);}
+  .checklist li{display:flex;align-items:flex-start;gap:var(--spacing-sm);background:var(--color-neutral-light);border:1px solid var(--color-neutral-medium);border-radius:8px;padding:var(--spacing-md);font-size:0.875rem;}
+  .checklist .ok{color:var(--color-success);font-weight:700;flex:none;}
+
+  footer{background:var(--color-neutral-dark);color:#C5D4EB;padding:var(--spacing-xxl) 0;}
+  footer h2{color:#fff;}
+  .refs{columns:2;column-gap:var(--spacing-xl);font-size:0.8125rem;}
+  @media (max-width:640px){.refs{columns:1;}}
+  .refs li{margin-bottom:var(--spacing-sm);break-inside:avoid;}
+  .refs a{color:#9db4dd;text-decoration:none;}
+  .refs a:hover{text-decoration:underline;}
+  .foot-meta{display:flex;justify-content:space-between;margin-top:var(--spacing-xxl);padding-top:var(--spacing-lg);border-top:1px solid rgba(197,212,235,0.2);font-family:var(--font-mono);font-size:0.6875rem;color:#8ea3c9;flex-wrap:wrap;gap:var(--spacing-sm);}
+
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<header class="site">
+  <nav class="nav">
+    <div class="brand"><span class="mark">GRID</span> Censo Fácil · Grids Móveis</div>
+    <ul class="nav-links">
+      <li><a href="#smartphone">Smartphone</a></li>
+      <li><a href="#tablet">Tablet</a></li>
+      <li><a href="#espacamento">Espaçamento</a></li>
+      <li><a href="#target-size">Target Size</a></li>
+      <li><a href="#mobile-first">Mobile-First</a></li>
+      <li><a href="#referencias">Referências</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="conteudo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">DSGov 4.0 · Mobile-First · WCAG 2.2 AA</div>
+          <h1>Grids móveis do <em>Censo Fácil</em></h1>
+          <p class="lede">Do smartphone básico do produtor rural ao Dispositivo Móvel de Coleta do agente censitário — um sistema de grid que se adapta com intenção, não apenas com flexibilidade, para funcionar em campo.</p>
+          <div class="tag-row">
+            <span class="tag">4 colunas · smartphone</span>
+            <span class="tag">8 colunas · tablet</span>
+            <span class="tag">8pt spacing system</span>
+            <span class="tag">Target size ≥ 24×24px</span>
+          </div>
+        </div>
+
+        <div class="device-shell" aria-hidden="true">
+          <div class="device-toggle">
+            <span class="active">smartphone · 4 col</span>
+            <span>tablet · 8 col</span>
+          </div>
+          <div class="preview-frame">
+            <div class="preview-cols">
+              <div></div><div></div><div></div><div></div>
+            </div>
+          </div>
+          <div class="preview-meta"><span>margem: 8px</span><span>medianiz: 16px</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEXTO -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 1</div>
+          <h2>Contexto e fundamentação</h2>
+        </div>
+      </div>
+      <p style="max-width:70ch">A abordagem é fundamentalmente <b style="color:var(--color-neutral-dark)">Mobile-First</b>: o design começa pela menor tela e recebe aprimoramento progressivo. Isso funciona como um filtro de conteúdo, forçando a priorização apenas do essencial para a jornada do usuário. Grids responsivos resolvem problemas de layout, mas não necessariamente de design — o "Censo Fácil" adapta o conteúdo com intenção e consciência contextual, para funcionar em campo, não apenas se encaixar numa grade flexível.</p>
+    </div>
+  </section>
+
+  <!-- SMARTPHONE + TABLET -->
+  <section style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seções 2 e 3</div>
+          <h2>Configuração por dispositivo</h2>
+        </div>
+      </div>
+
+      <div class="device-compare">
+        <div class="device-card" id="smartphone">
+          <div class="persona">Seu José · produtor rural</div>
+          <h3>Smartphone — retrato</h3>
+          <div class="device-demo phone"><div class="cols"><div></div><div></div><div></div><div></div></div></div>
+          <table>
+            <tr><td>Colunas</td><td>4 fluidas</td></tr>
+            <tr><td>Margens laterais</td><td>8px</td></tr>
+            <tr><td>Medianiz</td><td>16px</td></tr>
+            <tr><td>Largura de conteúdo</td><td>100% fluida</td></tr>
+            <tr><td>Alinhamento</td><td>Centralizado</td></tr>
+          </table>
+        </div>
+
+        <div class="device-card" id="tablet">
+          <div class="persona">Mariana / Carlos · DMC &amp; ACQ</div>
+          <h3>Tablet — paisagem</h3>
+          <div class="device-demo tablet"><div class="cols"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+          <table>
+            <tr><td>Colunas</td><td>8 fluidas</td></tr>
+            <tr><td>Margens laterais</td><td>16px</td></tr>
+            <tr><td>Medianiz</td><td>16px</td></tr>
+            <tr><td>Largura máxima</td><td>Expansível</td></tr>
+            <tr><td>Reorganização</td><td>Cards de 2 ou 4 col.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="ruler">
+        <div class="ruler-track">
+          <div class="ruler-seg mobile">320px+</div>
+          <div class="ruler-seg tablet">768px+</div>
+          <div class="ruler-seg desktop">1024px+</div>
+        </div>
+        <div class="ruler-labels">
+          <span>Base (mobile) · grid 4 col</span>
+          <span>Tablet · grid 8 col</span>
+          <span>Desktop · grid expandida</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPAÇAMENTO -->
+  <section id="espacamento">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 4</div>
+          <h2>Sistema de espaçamento 8pt</h2>
+          <p>Compatível com a maioria das resoluções, funciona em displays @1x, @2x e @3x, e reduz erros de tradução entre design e código.</p>
+        </div>
+      </div>
+      <div class="spacing-demo">
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:4px"></div><div class="lbl">xs · 4px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:8px"></div><div class="lbl">sm · 8px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:16px"></div><div class="lbl">md · 16px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:24px"></div><div class="lbl">lg · 24px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:32px"></div><div class="lbl">xl · 32px</div></div>
+        <div class="spacing-bar-wrap"><div class="spacing-bar" style="height:48px"></div><div class="lbl">xxl · 48px</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARGET SIZE -->
+  <section id="target-size" style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 5</div>
+          <h2>Target size e acessibilidade</h2>
+          <p>WCAG 2.2 — 2.5.8 (Target Size Minimum): a organização em colunas facilita alvos interativos com área mínima adequada ao toque.</p>
+        </div>
+      </div>
+
+      <div class="targets" style="margin-bottom:var(--spacing-xxl)">
+        <div class="target-demo"><div class="target-box std">24</div><div class="cap">Alvos padrão — mínimo 24×24px CSS (WCAG AA)</div></div>
+        <div class="target-demo"><div class="target-box crit">48×48</div><div class="cap">Botões críticos (GNSS) — recomendado em campo</div></div>
+        <div class="target-demo">
+          <div class="spaced-pair"><div class="target-box spaced"></div><div class="target-box spaced"></div></div>
+          <div class="cap">Dois alvos de 16px + 8px de espaço = 24px equivalente</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--spacing-xl)">
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-sm)">Exceções ao Target Size</h3>
+          <ul class="checklist">
+            <li><span class="ok">–</span><span>Links inline em parágrafos (limitados pela altura da linha)</span></li>
+            <li><span class="ok">–</span><span>Controles determinados pelo agente do usuário (inputs nativos)</span></li>
+            <li><span class="ok">–</span><span>Elementos cujo tamanho não pode mudar sem afetar a funcionalidade</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-sm)">Referência de alvos</h3>
+          <table class="spec">
+            <tr><td>Alvos padrão</td><td>24×24px CSS</td></tr>
+            <tr><td>Botões críticos (GNSS)</td><td>48×48px CSS</td></tr>
+            <tr><td>Espaçamento entre alvos</td><td>8px mínimo</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE FIRST -->
+  <section id="mobile-first">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 6</div>
+          <h2>Filosofia Mobile-First</h2>
+          <p>O design inicia pela menor tela e recebe aprimoramento progressivo.</p>
+        </div>
+      </div>
+
+      <div class="progression">
+        <div class="prog-step">
+          <div class="dot"></div>
+          <h3>Tela pequena — smartphone</h3>
+          <p>Apenas conteúdo e funções essenciais.</p>
+          <span class="grid-tag">grid: 4 colunas · margem 8px</span>
+        </div>
+        <div class="prog-step">
+          <div class="dot"></div>
+          <h3>Tela média — tablet</h3>
+          <p>Adição de colunas e informações secundárias.</p>
+          <span class="grid-tag">grid: 8 colunas · margem 16px</span>
+        </div>
+        <div class="prog-step">
+          <div class="dot"></div>
+          <h3>Tela grande — desktop</h3>
+          <p>Adição de recursos avançados e interações.</p>
+          <span class="grid-tag">grid expandida</span>
+        </div>
+      </div>
+
+      <div style="margin-top:var(--spacing-xxl)">
+        <h3 style="font-size:0.9375rem; margin-bottom:var(--spacing-md)">Benefícios da abordagem</h3>
+        <div class="benefits">
+          <div class="benefit"><h3>Filtro de conteúdo</h3><p>Força a priorização do que é realmente essencial para a jornada do usuário.</p></div>
+          <div class="benefit"><h3>Performance</h3><p>Menos recursos para carregar em dispositivos de baixa capacidade.</p></div>
+          <div class="benefit"><h3>Acessibilidade</h3><p>Melhor experiência para usuários com dispositivos básicos.</p></div>
+          <div class="benefit"><h3>Escalabilidade</h3><p>Facilidade para adicionar complexidade progressivamente.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTES -->
+  <section style="background:var(--color-neutral-light)">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 7</div>
+          <h2>Testes de responsividade e conformidade</h2>
+        </div>
+      </div>
+      <table class="spec" style="margin-bottom:var(--spacing-xl)">
+        <thead><tr><th>Critério</th><th>Método de validação</th><th>Referência</th></tr></thead>
+        <tbody>
+          <tr><td>Ausência de rolagem horizontal</td><td>Teste em resoluções comuns de smartphones e tablets</td><td>—</td></tr>
+          <tr><td>Legibilidade mantida</td><td>Verificação da tipografia Univers LT Std em tamanhos acessíveis</td><td>e-MAG Área 4</td></tr>
+          <tr><td>Adaptação dinâmica de componentes</td><td>Teste de reorganização de cards e elementos</td><td>—</td></tr>
+          <tr><td>Target Size ≥ 24×24px</td><td>Inspeção de elementos interativos</td><td>WCAG 2.2 2.5.8</td></tr>
+          <tr><td>Contraste ≥ 4.5:1</td><td>Ferramenta de Avaliação Gov.br</td><td>WCAG 1.4.3</td></tr>
+        </tbody>
+      </table>
+      <div class="tag-row">
+        <span class="tag">Xcode Accessibility Inspector</span>
+        <span class="tag">Ferramenta de Avaliação Gov.br</span>
+        <span class="tag">Testes em dispositivos reais</span>
+        <span class="tag">Validadores automáticos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSÃO -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Seção 8</div>
+          <h2>Conclusão</h2>
+        </div>
+      </div>
+      <p class="lede">A configuração de grids móveis garante um sistema resiliente e operável tanto em smartphones básicos quanto em equipamentos profissionais de campo, mantendo a sobriedade e o rigor institucional do IBGE — do produtor rural à auditoria de dados em escritórios regionais.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="referencias">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#9db4dd">Seção 9</div>
+    <h2>Referências</h2>
+    <ul class="refs" style="margin-top:var(--spacing-lg)">
+      <li>BRASIL. <a href="https://www.gov.br/ds/" target="_blank" rel="noopener">DSGov 4.0 — Padrão Digital de Governo</a>.</li>
+      <li>BRASIL. <a href="https://emag.governoeletronico.gov.br/" target="_blank" rel="noopener">e-MAG 3.1 — Modelo de Acessibilidade em Governo Eletrônico</a>.</li>
+      <li>W3C. <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener">Web Content Accessibility Guidelines (WCAG) 2.2</a>.</li>
+      <li>W3C. <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum" target="_blank" rel="noopener">WCAG 2.2 — Critério 2.5.8 (Target Size Minimum)</a>.</li>
+      <li>IBGE. <a href="https://biblioteca.ibge.gov.br/visualizacao/instrumentos_de_coleta/doc5723.pdf" target="_blank" rel="noopener">Manual do Recenseador do Censo Demográfico 2022 (CD-1.09)</a>.</li>
+      <li>IBGE. <a href="https://biblioteca.ibge.gov.br/visualizacao/instrumentos_de_coleta/doc0934.pdf" target="_blank" rel="noopener">Instruções Operacionais para Supervisores (CA 2.10)</a>.</li>
+      <li><a href="https://raw.githubusercontent.com/NeverSight/skills_feed/refs/heads/main/data/skills-md/sitechfromgeorgia/georgian-distribution-system/modern-ui-designer/SKILL.md" target="_blank" rel="noopener">8px Grid System — Modern UI Design</a>.</li>
+      <li>LambdaTest. <a href="https://www.lambdatest.com/support/docs/accessibility-web-rule-2-5-8-target-size/" target="_blank" rel="noopener">Target Size (Minimum) (2.5.8)</a>.</li>
+      <li>Deque Systems. <a href="https://docs.deque.com/devtools-mobile/2025.7.2/en/ios-touch-target-spacing" target="_blank" rel="noopener">Touch Target Spacing</a>.</li>
+      <li>GitHub. <a href="https://github.com/wshobson/agents/blob/main/plugins/ui-design/skills/accessibility-compliance//references/mobile-accessibility.md" target="_blank" rel="noopener">Mobile Accessibility WCAG</a>.</li>
+    </ul>
+    <div class="foot-meta">
+      <span>Grids Móveis — Censo Fácil · v1.0</span>
+      <span>Agosto 2026 · Validado com DSGov 4.0 e WCAG 2.2 AA</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt" lang="pt">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Censo Fácil - Teste do Componente GNSS Tracker</title>
+  <style type="text/css">
+    body {
+      background-color: #FFFFFF;
+      font-family: "Univers LT Std", "Univers", Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      color: #1C1C1E;
+    }
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+      border: 1px solid #C5D4EB;
+      border-radius: 8px;
+      background-color: #F5F5F5;
+    }
+    h1 {
+      font-size: 1.5rem;
+      color: #0033A0;
+      margin-top: 0;
+    }
+    .test-controls {
+      margin-top: 16px;
+      padding: 12px;
+      background-color: #FFFFFF;
+      border: 1px solid #C5D4EB;
+      border-radius: 4px;
+    }
+    .control-row {
+      margin-bottom: 12px;
+    }
+    .control-row:last-child {
+      margin-bottom: 0;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid #C5D4EB;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>📍 Teste de Handoff: Componente br-gnss-tracker</h1>
+    
+    <div role="main">
+      <br-gnss-tracker id="gnss-test-element" status="loading">
+        <span slot="status-message" id="custom-message">Inicializando conexão com constelação de satélites...</span>
+      </br-gnss-tracker>
+    </div>
+
+    <div class="test-controls" role="region" aria-label="Controles de Simulação">
+      <h2>⚙️ Controles de Simulação</h2>
+      <div class="control-row">
+        <label for="input-lat">Latitude de Teste:</label>
+        <input type="number" id="input-lat" step="0.000001" value="-22.326231" />
+      </div>
+      <div class="control-row">
+        <label for="input-long">Longitude de Teste:</label>
+        <input type="number" id="input-long" step="0.000001" value="-42.669123" />
+      </div>
+      <div class="control-row">
+        <label for="input-hdop">HDOP de Teste:</label>
+        <input type="number" id="input-hdop" step="0.1" value="1.8" />
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    /* <![CDATA[ */
+    import { BrGnssTracker } from './br-gnss-tracker.js';
+
+    // Registro manual do componente (caso o import não o faça automaticamente)
+    if (!customElements.get('br-gnss-tracker')) {
+      customElements.define('br-gnss-tracker', BrGnssTracker);
+    }
+
+    const tracker = document.getElementById('gnss-test-element');
+    const inputLat = document.getElementById('input-lat');
+    const inputLong = document.getElementById('input-long');
+    const inputHdop = document.getElementById('input-hdop');
+
+    // Inicializa os valores do componente de teste
+    if (tracker) {
+      tracker.lat = parseFloat(inputLat.value) || 0;
+      tracker.long = parseFloat(inputLong.value) || 0;
+      tracker.hdop = parseFloat(inputHdop.value) || null;
+
+      // Ouvintes de eventos do componente para simulação reativa
+      inputLat.addEventListener('input', function(e) {
+        tracker.lat = parseFloat(e.target.value) || 0;
+      });
+
+      inputLong.addEventListener('input', function(e) {
+        tracker.long = parseFloat(e.target.value) || 0;
+      });
+
+      inputHdop.addEventListener('input', function(e) {
+        tracker.hdop = parseFloat(e.target.value) || null;
+      });
+
+      // Ouvindo os CustomEvents emitidos pelo br-gnss-tracker
+      tracker.addEventListener('br-position-update', function(e) {
+        console.log('Position update event captured:', e.detail);
+      });
+
+      tracker.addEventListener('br-status-change', function(e) {
+        console.log('Status change event captured:', e.detail);
+      });
+    }
+    /* ]]> */
+  </script>
+</body>
+</html>
